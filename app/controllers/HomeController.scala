@@ -76,26 +76,16 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.index(content))
   }
 
-  def up(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    formatter = formatter.navigate(Up)
+  def direction(dir: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    formatter = formatter.navigate(dir match {
+      case "up" => Up
+      case "down" => Down
+      case "left" => Left
+      case "right" => Right
+    })
     Redirect(routes.HomeController.index())
   }
 
-  def right(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    formatter = formatter.navigate(Right)
-    Redirect(routes.HomeController.index())
-  }
-
-  def down(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    formatter = formatter.navigate(Down)
-    Redirect(routes.HomeController.index())
-  }
-
-  def left(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    formatter = formatter.navigate(Left)
-    Redirect(routes.HomeController.index())
-  }
-  
   def select(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     formatter.select()
     Redirect(routes.HomeController.index())

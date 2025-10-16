@@ -13,13 +13,15 @@ import blockudoku.windows.{ConsoleWindow, FocusManager, Window}
 import javax.inject.*
 import play.api.*
 import play.api.mvc.*
+import util.ColorUtilities
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController, Window {
+class HomeController @Inject()(val controllerComponents: ControllerComponents,
+                               val colorUtilities: ColorUtilities) extends BaseController, Window {
 
   private val container = ComponentContainer().registerComponents().buildProvider()
 
@@ -62,7 +64,8 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
 
   private def content: String = {
     formatter = createFormatter(formatter.selectedX, formatter.selectedY)
-    formatter.content()
+    colorUtilities.convertConsoleToHTML(formatter.content())
+    //formatter.content()
   }
 
   /**

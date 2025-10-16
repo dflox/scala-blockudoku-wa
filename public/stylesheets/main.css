@@ -1,4 +1,10 @@
+#body {
+    background-color: black;
+}
+
 #content {
     white-space: pre-wrap;
     font-family: monospace;
+    color: white;
+    text-align: center;
 }

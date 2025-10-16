@@ -5,6 +5,7 @@ import blockudoku.controllers.{ElementCollector, GridCollector}
 import io.gitlab.freeeezee.yadis.ComponentContainer
 import blockudoku.registerComponents
 import blockudoku.services.{ApplicationThread, GridPreviewBuilder}
+import blockudoku.views.console.composed.Direction.*
 import blockudoku.views.console.composed.{ComposedConsoleFormatter, VerticalFrame}
 import blockudoku.views.console.{ConsoleElementView, ConsoleGridView, ConsoleHeadlineView, ConsoleView}
 import blockudoku.windows.{ConsoleWindow, FocusManager, Window}
@@ -73,6 +74,31 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
    */
   def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index(content))
+  }
+
+  def up(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    formatter = formatter.navigate(Up)
+    Redirect(routes.HomeController.index())
+  }
+
+  def right(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    formatter = formatter.navigate(Right)
+    Redirect(routes.HomeController.index())
+  }
+
+  def down(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    formatter = formatter.navigate(Down)
+    Redirect(routes.HomeController.index())
+  }
+
+  def left(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    formatter = formatter.navigate(Left)
+    Redirect(routes.HomeController.index())
+  }
+  
+  def select(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    formatter.select()
+    Redirect(routes.HomeController.index())
   }
 
   override def display(): Unit = {

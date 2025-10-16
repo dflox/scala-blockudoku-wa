@@ -1,8 +1,5 @@
 GET     /                           controllers.HomeController.index()
-GET     /up                         controllers.HomeController.up()
-GET     /right                      controllers.HomeController.right()
-GET     /left                       controllers.HomeController.left()
-GET     /down                       controllers.HomeController.down()
-GET     /select                     controllers.HomeController.select()
+POST    /direction/:dir             controllers.HomeController.direction(dir: String)
+POST    /select                     controllers.HomeController.select()
 
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

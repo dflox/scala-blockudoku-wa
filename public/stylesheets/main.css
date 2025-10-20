@@ -3,8 +3,32 @@
 }
 
 #content {
-    white-space: pre-wrap;
     font-family: monospace;
     color: white;
+    flex-direction: column;
+    display: flex;;
+    align-items: center;
+    justify-content: center;
+}
+
+#controlls {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.tileFrames {
+    height: 50px;
+    width: 50px;
+}
+
+.tile{
+    height: 45px;
+    width: 45px;
+    background-color: grey;
+}
+
+.title{
+    font-size: 30px;
+    color: aliceblue;
     text-align: center;
 }

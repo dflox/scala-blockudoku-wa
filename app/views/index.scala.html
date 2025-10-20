@@ -1,24 +1,45 @@
-@(content: String)
+@import blockudoku.models.Grid
+@import util.HtmlUtilities
+@(content: String, grid: Grid, htmlUntil: HtmlUtilities)
 
-@main("Welcome to Play") {
-    <div id="content">@Html(content)</div>
-    <form action="/direction/up" method="POST">
-        <button>Up</button>
-    </form>
+@main("gameboard") {
+    <div id="content">
+        <table>
+        @for(y <- 0 until grid.yLength) {
+            <tr>
+            @for(x <- 0 until grid.xLength) {
+                @defining(grid.tile(x, y).get) { tile =>
+                    <td class="tileFrames">
+                        <button class="tile">
+                            @htmlUntil.getTileButtonText(tile)
+                        </button>
+                    </td>
+                }
+            }
+        }
+        </table>
+    </div>
 
-    <form action="/direction/right" method="POST">
-        <button>Right</button>
-    </form>
+    <div id="controlls">
 
-    <form action="/direction/down" method="POST">
-        <button>Down</button>
-    </form>
+        <form action="/direction/up" method="POST">
+            <button>Up</button>
+        </form>
 
-    <form action="/direction/left" method="POST">
-        <button>Left</button>
-    </form>
+        <form action="/direction/right" method="POST">
+            <button>Right</button>
+        </form>
 
-    <form action="/select" method="POST">
-        <button>Select</button>
-    </form>
+        <form action="/direction/down" method="POST">
+            <button>Down</button>
+        </form>
+
+        <form action="/direction/left" method="POST">
+            <button>Left</button>
+        </form>
+
+        <form action="/select" method="POST">
+            <button>Select</button>
+        </form>
+    </div>
 }

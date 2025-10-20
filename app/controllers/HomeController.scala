@@ -13,7 +13,7 @@ import blockudoku.windows.{ConsoleWindow, FocusManager, Window}
 import javax.inject.*
 import play.api.*
 import play.api.mvc.*
-import util.ColorUtilities
+import util.{ColorUtilities, HtmlUtilities}
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -21,7 +21,8 @@ import util.ColorUtilities
  */
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents,
-                               val colorUtilities: ColorUtilities) extends BaseController, Window {
+                               val colorUtilities: ColorUtilities,
+                               val htmlUtilities: HtmlUtilities) extends BaseController, Window {
 
   private val container = ComponentContainer().registerComponents().buildProvider()
 
@@ -76,7 +77,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
    * a path of `/`.
    */
   def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.index(content))
+    Ok(views.html.index(content, gridCollector.getGrid, htmlUtilities))
   }
 
   def direction(dir: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>

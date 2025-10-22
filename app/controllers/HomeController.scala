@@ -66,13 +66,10 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
   }
   
   def getPreview(tileIndex: Int): Action[AnyContent] = Action { implicit
-                                                 request: Request[AnyContent] => {
+                                                 request: Request[AnyContent] => 
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
-    
-    val previewGrid = gameState.getPreviewGrid(tileIndex)
+    val tilesToUpdate = gameState.getPreviewGridDiff(tileIndex)
 
-    val tilesToUpdate: Vector[Tile]
-
-    Ok(tilesToUpdate, htmlUtilities)
+    Ok(views.html.tile(tilesToUpdate, htmlUtilities))
   }
 }

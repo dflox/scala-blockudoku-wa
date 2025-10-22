@@ -1,45 +1,39 @@
-@import blockudoku.models.Grid
+@import blockudoku.models.{Element, Grid}
 @import util.HtmlUtilities
-@(grid: Grid, htmlUntil: HtmlUtilities)
+@(grid: Grid, elements: List[Element], htmlUtil: HtmlUtilities)
 
 @main("gameboard") {
     <div id="content">
         <table>
         @for(y <- 0 until grid.yLength) {
             <tr>
-            @for(x <- 0 until grid.xLength) {
-                @defining(grid.tile(x, y).get) { tile =>
-                    <td class="tileFrames">
-                        <button class="tile">
-                            @htmlUntil.getTileButtonText(tile)
-                        </button>
-                    </td>
+                @for(x <- 0 until grid.xLength) {
+                    @defining(grid.tile(x, y).get) { tile =>
+                        <td class="tileFrames">
+                            <form action="/place/@tile.index" method="POST">
+                                <button hx-trigger="mouseenter"
+                                hx-post="/preview/@tile.index" 
+                                class="tile" 
+                                id="tile@tile.index">
+                                    @htmlUtil.getTileButtonText(tile)
+                                </button>
+                            </form>
+                        </td>
+                    }
                 }
             }
-        }
         </table>
     </div>
 
     <div id="controlls">
-
-        <form action="/direction/up" method="POST">
-            <button>Up</button>
+        <form action="/select/0" class="elementSelector" method="POST">
+            <button>@Html(htmlUtil.getElementAsText(elements.head))</button>
         </form>
-
-        <form action="/direction/right" method="POST">
-            <button>Right</button>
+        <form action="/select/1" class="elementSelector" method="POST">
+            <button>@Html(htmlUtil.getElementAsText(elements(1)))</button>
         </form>
-
-        <form action="/direction/down" method="POST">
-            <button>Down</button>
-        </form>
-
-        <form action="/direction/left" method="POST">
-            <button>Left</button>
-        </form>
-
-        <form action="/select" method="POST">
-            <button>Select</button>
+        <form action="/select/2" class="elementSelector" method="POST">
+            <button>@Html(htmlUtil.getElementAsText(elements(2)))</button>
         </form>
     </div>
 }

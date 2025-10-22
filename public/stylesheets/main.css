@@ -13,7 +13,10 @@
 
 #controlls {
     margin-top: 20px;
-    text-align: center;
+    flex-direction: column;
+    display: flex;;
+    align-items: center;
+    justify-content: center;
 }
 
 .tileFrames {
@@ -31,4 +34,9 @@
     font-size: 30px;
     color: aliceblue;
     text-align: center;
+}
+
+.elementSelector{
+    white-space: pre-wrap;
+    text-align: left;
 }

@@ -1,0 +1,6 @@
+@import blockudoku.models.Tile
+@import util.HtmlUtilities
+@(tiles: Vector[Tile], htmlUtil: HtmlUtilities)
+@for(tile <- tiles) {
+    <button id="tile@tile.index" hx-swap-oob="true" class="tile">@htmlUtil.getTileButtonText(tile)</button>
+}

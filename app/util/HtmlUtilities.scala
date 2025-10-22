@@ -1,6 +1,7 @@
 package util
 
-import blockudoku.models.Tile
+import blockudoku.models.{Element, Tile}
+import blockudoku.services.console.ElementFormatter
 
 import javax.inject.Singleton
 
@@ -13,5 +14,11 @@ class HtmlUtilities {
       case blockudoku.models.TileState.previewValid => "*"
       case blockudoku.models.TileState.previewInvalid => "!"
     }
+  }
+
+  def getElementAsText(element: Element): String = {
+    val elementFormatter = ElementFormatter(element)
+    val content = elementFormatter.content
+    content.replaceAll("\n", "<br>")
   }
 }

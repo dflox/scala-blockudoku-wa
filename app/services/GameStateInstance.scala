@@ -2,7 +2,7 @@ package services
 
 import blockudoku.commands.{CommandFactory, CommandInvoker}
 import blockudoku.controllers.{ElementCollector, GridCollector}
-import blockudoku.models.Grid
+import blockudoku.models.{Grid, Tile}
 import blockudoku.windows.{FocusManager, Window}
 import io.gitlab.freeeezee.yadis.ComponentContainer
 import blockudoku.registerComponents
@@ -77,16 +77,29 @@ class GameStateInstance extends Window {
     elementCollector.getElements
   }
 
-  def selectElement(ind: Int): Unit = {
-    val element = elementCollector.getElements(ind)
+  def selectElement(tileIndex: Int): Unit = {
+    val element = elementCollector.getElements(tileIndex)
     val command = commandFactory.createSelectElementCommand(element)
     commandInvoker.execute(command)
   }
 
   def placeElement(tileIndex: Int): Unit = {
-    val command = commandFactory.createSetElementCommand(elementCollector.getSelectedElement.get,
+    val command = commandFactory.createSetElementCommand(
+      elementCollector.getSelectedElement.get,
       tileIndex)
     commandInvoker.execute(command)
+  }
+  
+  def getPreviewGridDiff(tileIndex: Int): Vector[Tile] = {
+    val grid = gridCollector.getGrid
+    val previewGrid = getPreviewGrid(tileIndex)
+    var tilesToUpdate: Vector[blockudoku.models.Tile] = Vector()
+    for (i <- grid.tiles.indices) {
+      if grid.tiles(i).state != previewGrid.tiles(i).state ||
+        grid.tiles(i).colors != previewGrid.tiles(i).colors then
+        tilesToUpdate = tilesToUpdate :+ previewGrid.tiles(i)
+    }
+    tilesToUpdate
   }
 
   override def display(): Unit = {

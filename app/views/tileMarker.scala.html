@@ -1,0 +1,21 @@
+@import blockudoku.models.Tile
+@import util.HtmlUtilities
+
+@(gridTile: Tile, htmlUtil: HtmlUtilities, isElementSelected: Boolean)
+<div
+    @(if (isElementSelected) "hx-trigger=mouseenter" else "")
+    hx-post="/preview/@gridTile.index"
+    id="tile@gridTile.index"
+    hx-swap-oob="true"
+>
+    @defining(htmlUtil.getTileMarkerImage(gridTile)){ image =>
+        @if(image.isDefined) {
+            <img
+                class="tile-clickable"
+                hx-trigger="click"
+                hx-post="/place/@gridTile.index"
+                src="@image.get"
+            >
+        }
+    }
+</div>

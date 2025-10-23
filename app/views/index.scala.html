@@ -10,9 +10,14 @@
                 @for(x <- 0 until grid.xLength) {
                     @defining(grid.tile(x, y).get) { gridTile =>
                         <td class="tileFrames">
-                            <form action="/place/@gridTile.index" method="POST">
-                                @tileButton(gridTile, htmlUtil, isElementSelected)
-                            </form>
+                            <div
+                            class="tile"
+                            >
+                                <img
+                                    src="@routes.Assets.versioned(htmlUtil.getTileImage(gridTile))"
+                                >
+                                @tileMarker(gridTile, htmlUtil, isElementSelected)
+                            </div>
                         </td>
                     }
                 }

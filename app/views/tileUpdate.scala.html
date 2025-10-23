@@ -2,5 +2,5 @@
 @import util.HtmlUtilities
 @(tiles: Vector[Tile], htmlUtil: HtmlUtilities, isElementSelected: Boolean)
 @for(tile <- tiles) {
-    @tileButton(tile, htmlUtil, isElementSelected)
+    @tileMarker(tile, htmlUtil, isElementSelected)
 }

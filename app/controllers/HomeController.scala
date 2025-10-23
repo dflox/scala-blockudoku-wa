@@ -4,7 +4,7 @@ import blockudoku.views.console.composed.Direction.*
 import play.api.*
 import play.api.mvc.*
 import services.GameStateService
-import util.{ColorUtilities, HtmlUtilities}
+import util.HtmlUtilities
 
 import javax.inject.*
 
@@ -15,7 +15,6 @@ extension (result: Result)
 
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents,
-                               val colorUtilities: ColorUtilities,
                                val htmlUtilities: HtmlUtilities,
                                val gameStateService: GameStateService) extends BaseController {
   private def getStateKeyCookie(implicit request: Request[AnyContent]): Option[String] = request.cookies

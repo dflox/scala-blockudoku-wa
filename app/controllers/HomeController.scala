@@ -29,7 +29,8 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
 
     val grid = gameState.getGrid
     val elements = gameState.getElements
-    Ok(views.html.index(grid, elements, htmlUtilities))
+    val selectedElement = gameState.getSelectedElement
+    Ok(views.html.index(grid, elements, htmlUtilities, selectedElement.isDefined))
       .withGameStateKeyCookie(key)
   }
   }
@@ -75,7 +76,10 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
     val previewGrid = gameState.getPreviewGrid(tileIndex)
     val tilesToUpdate = gameState.getPreviewGridDiff(tileIndex)
 
-    Ok(views.html.tile(tilesToUpdate, htmlUtilities))
+    val isElementSelected = gameState.getSelectedElement.isDefined
+
+    Ok(views.html.tileUpdate(tilesToUpdate, htmlUtilities, isElementSelected))
+      .withGameStateKeyCookie(key)
   }
   }
 }

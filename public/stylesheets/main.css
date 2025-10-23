@@ -13,7 +13,7 @@
 
 #controlls {
     margin-top: 20px;
-    flex-direction: column;
+    flex-direction: row;
     display: flex;;
     align-items: center;
     justify-content: center;

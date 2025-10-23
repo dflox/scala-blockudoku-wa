@@ -23,6 +23,8 @@ class GameStateInstance extends Window {
   private val consoleViews = initializeViews()
   private var formatter = createFormatter(0, 0)
 
+  private var currentPreview: Grid = gridCollector.getGrid
+
   private def initializeViews(): List[ConsoleView] = {
     var views: List[ConsoleView] = List()
 
@@ -76,6 +78,10 @@ class GameStateInstance extends Window {
   def getElements: List[blockudoku.models.Element] = {
     elementCollector.getElements
   }
+  
+  def getSelectedElement: Option[blockudoku.models.Element] = {
+    elementCollector.getSelectedElement
+  }
 
   def selectElement(tileIndex: Int): Unit = {
     val element = elementCollector.getElements(tileIndex)
@@ -91,14 +97,14 @@ class GameStateInstance extends Window {
   }
   
   def getPreviewGridDiff(tileIndex: Int): Vector[Tile] = {
-    val grid = gridCollector.getGrid
-    val previewGrid = getPreviewGrid(tileIndex)
+    val newPreviewGrid = getPreviewGrid(tileIndex)
     var tilesToUpdate: Vector[blockudoku.models.Tile] = Vector()
-    for (i <- grid.tiles.indices) {
-      if grid.tiles(i).state != previewGrid.tiles(i).state ||
-        grid.tiles(i).colors != previewGrid.tiles(i).colors then
-        tilesToUpdate = tilesToUpdate :+ previewGrid.tiles(i)
+    for (i <- currentPreview.tiles.indices) {
+      if currentPreview.tiles(i).state != newPreviewGrid.tiles(i).state ||
+        currentPreview.tiles(i).colors != newPreviewGrid.tiles(i).colors then
+        tilesToUpdate = tilesToUpdate :+ newPreviewGrid.tiles(i)
     }
+    currentPreview = newPreviewGrid
     tilesToUpdate
   }
 

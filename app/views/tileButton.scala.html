@@ -1,0 +1,15 @@
+@import blockudoku.models.Tile
+@import util.HtmlUtilities
+
+@(tile: Tile, htmlUtil: HtmlUtilities, isElementSelected: Boolean)
+
+<button
+    @(if (isElementSelected) "hx-trigger=mouseenter" else "")
+    hx-post="/preview/@tile.index"
+    id="tile@tile.index"
+    hx-swap-oob="true"
+    class="tile"
+    @(if (isElementSelected) "" else "disabled")
+>
+    @htmlUtil.getTileButtonText(tile)
+</button>

@@ -1,6 +1,6 @@
 @import blockudoku.models.{Element, Grid}
 @import util.HtmlUtilities
-@(grid: Grid, elements: List[Element], htmlUtil: HtmlUtilities)
+@(grid: Grid, elements: List[Element], htmlUtil: HtmlUtilities, isElementSelected: Boolean)
 
 @main("gameboard") {
     <div id="content">
@@ -8,15 +8,10 @@
         @for(y <- 0 until grid.yLength) {
             <tr>
                 @for(x <- 0 until grid.xLength) {
-                    @defining(grid.tile(x, y).get) { tile =>
+                    @defining(grid.tile(x, y).get) { gridTile =>
                         <td class="tileFrames">
-                            <form action="/place/@tile.index" method="POST">
-                                <button hx-trigger="mouseenter"
-                                hx-post="/preview/@tile.index" 
-                                class="tile" 
-                                id="tile@tile.index">
-                                    @htmlUtil.getTileButtonText(tile)
-                                </button>
+                            <form action="/place/@gridTile.index" method="POST">
+                                @tileButton(gridTile, htmlUtil, isElementSelected)
                             </form>
                         </td>
                     }

@@ -1,6 +1,5 @@
 package controllers
 
-import blockudoku.models.Tile
 import blockudoku.views.console.composed.Direction.*
 import play.api.*
 import play.api.mvc.*
@@ -12,7 +11,7 @@ import javax.inject.*
 val COOKIE_KEY = "state-key"
 extension (result: Result)
   def withGameStateKeyCookie(key: String): Result =
-    result.withCookies(Cookie("username", key))
+    result.withCookies(Cookie(COOKIE_KEY, key))
 
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents,
@@ -25,7 +24,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
     case None => None
   }
 
-  def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+  def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] => {
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
 
     val grid = gameState.getGrid
@@ -33,8 +32,9 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
     Ok(views.html.index(grid, elements, htmlUtilities))
       .withGameStateKeyCookie(key)
   }
+  }
 
-  def direction(dir: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+  def direction(dir: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] => {
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
 
     gameState.navigate(dir match {
@@ -46,33 +46,37 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
     Redirect(routes.HomeController.index())
       .withGameStateKeyCookie(key)
   }
+  }
 
   def selectElement(ind: Int): Action[AnyContent] = Action { implicit
-                                                             request: Request[AnyContent] =>
+                                                             request: Request[AnyContent] => {
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
 
     gameState.selectElement(ind)
     Redirect(routes.HomeController.index())
       .withGameStateKeyCookie(key)
   }
+  }
 
   def placeElement(tileIndex: Int): Action[AnyContent] = Action { implicit
-                                                                  request: Request[AnyContent] =>
+                                                                  request: Request[AnyContent] => {
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
-    
+
     gameState.placeElement(tileIndex)
     Redirect(routes.HomeController.index())
       .withGameStateKeyCookie(key)
   }
-  
+  }
+
   def getPreview(tileIndex: Int): Action[AnyContent] = Action { implicit
-                                                 request: Request[AnyContent] => {
+                                                                request: Request[AnyContent] => {
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
-    
+
     val previewGrid = gameState.getPreviewGrid(tileIndex)
 
     val tilesToUpdate: Vector[Tile]
 
     Ok(tilesToUpdate, htmlUtilities)
+  }
   }
 }

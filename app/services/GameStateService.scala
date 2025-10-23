@@ -15,7 +15,7 @@ class GameStateService {
   private def newInstance: (String, GameStateInstance) = {
     val instance = GameStateInstance()
     val key = newKey
-    instances(newKey) = instance
+    instances(key) = instance
 
     (key, instance)
   }

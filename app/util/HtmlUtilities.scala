@@ -19,6 +19,7 @@ class HtmlUtilities() {
   }
 
   private val imagePathPrefix = "images"
+  private val markerImagePathPrefix = "assets/" + imagePathPrefix
 
   def getTileImage(tile: Tile): String = {
     if (tile.state == TileState.empty ) imagePathPrefix + "/background_block_final.png"
@@ -29,8 +30,8 @@ class HtmlUtilities() {
     tile.state match {
       case TileState.empty => None
       case TileState.blocked => None
-      case TileState.previewValid => Some(imagePathPrefix + "/block_green.png")
-      case TileState.previewInvalid => Some(imagePathPrefix + "/block_red.png")
+      case TileState.previewValid => Some(markerImagePathPrefix + "/block_green.png")
+      case TileState.previewInvalid => Some(markerImagePathPrefix + "/block_red.png")
     }
   }
 

@@ -21,13 +21,16 @@
 .tileFrames {
   height: 50px;
   width: 50px;
+  padding: 0;
 }
 
 .tile {
-  height: 49px;
-  width: 49px;
+  height: 50px;
+  width: 50px;
   background-color: grey;
+  position: relative;
 }
+
 .tile-clickable {
   height: 100%;
   width: 100%;
@@ -42,4 +45,24 @@
 .elementSelector {
   white-space: pre-wrap;
   text-align: left;
+}
+
+.table {
+  border-spacing: 0;
+}
+
+.tile-marker-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.tile-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }

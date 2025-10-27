@@ -7,15 +7,20 @@
     hx-post="/preview/@gridTile.index"
     id="tile@gridTile.index"
     hx-swap-oob="true"
+    class="tile-marker-wrapper"
 >
     @defining(htmlUtil.getTileMarkerImage(gridTile)){ image =>
         @if(image.isDefined) {
-            <img
-                class="tile-clickable"
-                hx-trigger="click"
-                hx-post="/place/@gridTile.index"
-                src="@image.get"
+            <form
+                action="/place/@gridTile.index"
+                method="post"
             >
+                <img
+                    class="tile-clickable"
+                    src="@image.get"
+                    onclick="this.closest('form').requestSubmit()"
+                >
+            </form>
         }
     }
 </div>

@@ -30,13 +30,13 @@
 
     <div id="controlls">
         <form action="/select/0" class="elementSelector" method="POST">
-            <button>@Html(htmlUtil.getElementAsText(elements.head))</button>
+            @element(elements.head, htmlUtil)
         </form>
         <form action="/select/1" class="elementSelector" method="POST">
-            <button>@Html(htmlUtil.getElementAsText(elements(1)))</button>
+            @element(elements(1), htmlUtil)
         </form>
         <form action="/select/2" class="elementSelector" method="POST">
-            <button>@Html(htmlUtil.getElementAsText(elements(2)))</button>
+            @element(elements(2), htmlUtil)
         </form>
     </div>
 }

@@ -1,0 +1,27 @@
+@import blockudoku.models.*
+@import util.HtmlUtilities
+
+@(element: Element, htmlUtil: HtmlUtilities)
+<table class="table" onclick="this.closest('form').requestSubmit()">
+    @for(y <- element.dimensions._4 to element.dimensions._3 by -1) {
+        <tr>
+            @for(x <- element.dimensions._1 to element.dimensions._2) {
+                @if(!element.structure.contains(Point(x, y))) {
+                    @defining(Tile(0, Point(0,0), element.colors, TileState.blocked)) { gridTile =>
+                        <td class="tileFrames">
+                            <div
+                            class="tile"
+                            >
+                                <img
+                                width="50px"
+                                height="50px"
+                                src="@routes.Assets.versioned(htmlUtil.getTileImage(gridTile))"
+                                class="tile-background-image"
+                                >
+                            </div>
+                        </td>
+                    }
+                }
+            }
+        }
+</table>

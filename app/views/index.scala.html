@@ -22,18 +22,19 @@
                         </div>
                     }
                 }
+            </div>
             }
         </div>
     </div>
 
-    <div class="controlls">
-        <form action="/select/0" class="elementSelector" method="POST">
+    <div class="row justify-content-center">
+        <form action="/select/0" class="col-auto" method="POST">
             @element(elements.head, htmlUtil)
         </form>
-        <form action="/select/1" class="elementSelector" method="POST">
+        <form action="/select/1" class="col-auto" method="POST">
             @element(elements(1), htmlUtil)
         </form>
-        <form action="/select/2" class="elementSelector" method="POST">
+        <form action="/select/2" class="col-auto" method="POST">
             @element(elements(2), htmlUtil)
         </form>
     </div>

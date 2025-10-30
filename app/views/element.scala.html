@@ -4,7 +4,7 @@
 @(element: Element, htmlUtil: HtmlUtilities)
 <div class="container" onclick="this.closest('form').requestSubmit()">
     @for(y <- element.dimensions._4 to element.dimensions._3 by -1) {
-        <div class="row justify-content-center ">
+        <div class="row">
             @for(x <- element.dimensions._1 to element.dimensions._2) {
                 <div class="col-auto tile-frames">
                     @if(element.structure.contains(Point(x, y))) {
@@ -22,5 +22,6 @@
                     }
                 </div>
             }
+        </div>
         }
 </div>

@@ -4,12 +4,12 @@
 
 @main("gameboard") {
     <div id="content">
-        <table class="table">
+        <div class="container">
         @for(y <- 0 until grid.yLength) {
-            <tr>
+            <div class="row g-0 justify-content-center">
                 @for(x <- 0 until grid.xLength) {
                     @defining(grid.tile(x, y).get) { gridTile =>
-                        <td class="tile-frames">
+                        <div class="col-auto">
                             <div
                             class="tile"
                             >
@@ -19,11 +19,11 @@
                                 >
                                 @tileMarker(gridTile, htmlUtil, isElementSelected)
                             </div>
-                        </td>
+                        </div>
                     }
                 }
             }
-        </table>
+        </div>
     </div>
 
     <div class="controlls">

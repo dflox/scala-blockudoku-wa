@@ -2,11 +2,11 @@
 @import util.HtmlUtilities
 
 @(element: Element, htmlUtil: HtmlUtilities)
-<table class="table" onclick="this.closest('form').requestSubmit()">
+<div class="container" onclick="this.closest('form').requestSubmit()">
     @for(y <- element.dimensions._4 to element.dimensions._3 by -1) {
-        <tr>
+        <div class="row justify-content-center ">
             @for(x <- element.dimensions._1 to element.dimensions._2) {
-                <td class="tile-frames">
+                <div class="col-auto tile-frames">
                     @if(element.structure.contains(Point(x, y))) {
                         @defining(Tile(0, Point(0,0), element.colors, TileState.blocked)) { gridTile =>
 
@@ -20,7 +20,7 @@
                                 </div>
                         }
                     }
-                </td>
+                </div>
             }
         }
-</table>
+</div>

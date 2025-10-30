@@ -9,7 +9,7 @@
 @text-secondary: #b0b0d0;
 @shadow-color: rgba(0, 212, 255, 0.3);
 @tile-size: 50px;
-@tile-gap: 1px;
+@tile-gap: 0px;
 
 .tile-size-mobile() {
   @tile-size: 35px;
@@ -45,10 +45,6 @@
   color: @primary-color;
   text-align: center;
   font-family: "Audiowide", sans-serif;
-  text-shadow:
-          0 0 10px @shadow-color,
-          0 0 20px @shadow-color,
-          0 0 30px @shadow-color;
   margin: 2% 0 10px 0;
   letter-spacing: 2px;
   animation: glow 2s ease-in-out infinite alternate;
@@ -74,10 +70,6 @@
   border-spacing: @tile-gap;
   background: rgba(0, 0, 0, 0.3);
   padding: 10px;
-  border-radius: 3px;
-  box-shadow:
-          0 8px 32px rgba(0, 0, 0, 0.4),
-          inset 0 0 20px rgba(0, 212, 255, 0.1);
   backdrop-filter: blur(10px);
 }
 
@@ -88,10 +80,10 @@
   position: relative;
   transition: transform 0.2s ease;
 
-  &:hover {
-    transform: scale(1.05);
-    z-index: 100;
-  }
+  //&:hover {
+  //  transform: scale(1.05);
+  //  z-index: 100;
+  //}
 }
 
 .tile {
@@ -99,7 +91,6 @@
   width: @tile-size;
   background: linear-gradient(145deg, @tile-bg, #1a1a3a);
   position: relative;
-  border-radius: 6px;
   box-shadow:
           0 2px 8px rgba(0, 0, 0, 0.3),
           inset 0 1px 2px rgba(255, 255, 255, 0.1);
@@ -114,23 +105,10 @@
     right: 0;
     bottom: 0;
     background: linear-gradient(135deg, transparent 0%, rgba(0, 212, 255, 0.15) 100%);
-    border-radius: 6px;
     pointer-events: none;
     z-index: 2;
   }
-
-  &:hover {
-    background: linear-gradient(145deg, @tile-hover, #2a2a4a);
-    box-shadow:
-            0 4px 16px @shadow-color,
-            inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  }
-
-  &:active {
-    background: linear-gradient(145deg, @tile-active, #3a3a5a);
-    transform: translateY(0);
-  }
-}
+ }
 
 .tile-clickable {
   height: 100%;
@@ -160,7 +138,6 @@
   width: 100%;
   object-fit: cover;
   z-index: 1;
-  border-radius: 6px;
   transition: filter 0.3s ease;
 
   .tile:hover & {
@@ -180,7 +157,6 @@
 .elementSelector {
   background: rgba(0, 0, 0, 0.3);
   padding: 12px;
-  border-radius: 8px;
   color: @text-secondary;
   border: 1px solid rgba(0, 212, 255, 0.2);
   backdrop-filter: blur(5px);
@@ -188,13 +164,6 @@
   overflow-x: auto;
   cursor: pointer;
   transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.4);
-    border-color: @primary-color;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px @shadow-color;
-  }
 
   &:active {
     transform: translateY(0);
@@ -274,9 +243,6 @@
     height: 35px;
     width: 35px;
 
-    &:hover {
-      transform: scale(1.08);
-    }
   }
 
   .tile {

@@ -5,6 +5,7 @@
 <div
     @(if (isElementSelected) "hx-trigger=mouseenter" else "")
     hx-post="/preview/@gridTile.index"
+    hx-sync="closest .tile-marker-wrapper:drop"
     id="tile@gridTile.index"
     hx-swap-oob="true"
     class="tile-marker-wrapper"

@@ -9,13 +9,11 @@
             <tr>
                 @for(x <- 0 until grid.xLength) {
                     @defining(grid.tile(x, y).get) { gridTile =>
-                        <td class="tileFrames">
+                        <td class="tile-frames">
                             <div
                             class="tile"
                             >
                                 <img
-                                    width="50px"
-                                    height="50px"
                                     src="@routes.Assets.versioned(htmlUtil.getTileImage(gridTile))"
                                     class="tile-background-image"
                                 >
@@ -28,7 +26,7 @@
         </table>
     </div>
 
-    <div id="controlls">
+    <div class="controlls">
         <form action="/select/0" class="elementSelector" method="POST">
             @element(elements.head, htmlUtil)
         </form>

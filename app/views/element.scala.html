@@ -1,7 +1,7 @@
 @import blockudoku.models.*
 @import util.HtmlUtilities
 
-@(element: Element, htmlUtil: HtmlUtilities)
+@(element: Element, htmlUtil: HtmlUtilities, schemeIndex: Int)
 <div class="container" onclick="this.closest('form').requestSubmit()">
     @for(y <- element.dimensions._4 to element.dimensions._3 by -1) {
         <div class="row">
@@ -14,7 +14,8 @@
                                 class="tile"
                                 >
                                     <img
-                                    src="@routes.Assets.versioned(htmlUtil.getTileImage(gridTile))"
+                                    src="@routes.Assets.versioned(htmlUtil.getTileImage(gridTile,
+                                        schemeIndex))"
                                     class="tile-background-image"
                                     >
                                 </div>

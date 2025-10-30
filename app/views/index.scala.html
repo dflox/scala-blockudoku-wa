@@ -2,40 +2,29 @@
 @import util.HtmlUtilities
 @(grid: Grid, elements: List[Element], htmlUtil: HtmlUtilities, isElementSelected: Boolean)
 
-@main("gameboard") {
-    <div id="content">
-        <div class="container">
-        @for(y <- 0 until grid.yLength) {
-            <div class="row g-0 justify-content-center">
-                @for(x <- 0 until grid.xLength) {
-                    @defining(grid.tile(x, y).get) { gridTile =>
-                        <div class="col-auto">
-                            <div
-                            class="tile"
-                            >
-                                <img
-                                    src="@routes.Assets.versioned(htmlUtil.getTileImage(gridTile))"
-                                    class="tile-background-image"
-                                >
-                                @tileMarker(gridTile, htmlUtil, isElementSelected)
-                            </div>
-                        </div>
-                    }
-                }
+@main() {
+    <div id="carouselExampleFade" class="carousel slide carousel-fade">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+            @gameboard(grid, elements,  htmlUtil, isElementSelected, 0)
             </div>
-            }
+            <div class="carousel-item">
+            @gameboard(grid, elements,  htmlUtil, isElementSelected, 1)
+            </div>
+            <div class="carousel-item">
+            @gameboard(grid, elements,  htmlUtil, isElementSelected, 2)
+            </div>
+            <div class="carousel-item">
+            @gameboard(grid, elements,  htmlUtil, isElementSelected, 3)
+            </div>
         </div>
-    </div>
-
-    <div class="row justify-content-center">
-        <form action="/select/0" class="col-auto" method="POST">
-            @element(elements.head, htmlUtil)
-        </form>
-        <form action="/select/1" class="col-auto" method="POST">
-            @element(elements(1), htmlUtil)
-        </form>
-        <form action="/select/2" class="col-auto" method="POST">
-            @element(elements(2), htmlUtil)
-        </form>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 }

@@ -100,7 +100,7 @@ class GameStateInstance extends Window {
     val newPreviewGrid = getPreviewGrid(tileIndex)
     var tilesToUpdate: Vector[blockudoku.models.Tile] = Vector()
     for (i <- currentPreview.tiles.indices) {
-      //if currentPreview.tiles(i).state != newPreviewGrid.tiles(i).state then
+      if currentPreview.tiles(i).state != newPreviewGrid.tiles(i).state then
         tilesToUpdate = tilesToUpdate :+ newPreviewGrid.tiles(i)
     }
     tilesToUpdate = tilesToUpdate :+ newPreviewGrid.tiles(tileIndex)

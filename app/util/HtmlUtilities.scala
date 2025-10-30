@@ -21,9 +21,12 @@ class HtmlUtilities() {
   private val imagePathPrefix = "images"
   private val markerImagePathPrefix = "assets/" + imagePathPrefix
 
-  def getTileImage(tile: Tile): String = {
+  def getTileImage(tile: Tile, schemeIndex: Int): String = {
     if (tile.state == TileState.empty ) imagePathPrefix + "/background_block_final.png"
-    else imagePathPrefix + ColorScheme.getColor(tile.colors)
+    else {
+      ColorScheme.setColorScheme(schemeIndex)
+      imagePathPrefix + ColorScheme.getColor(tile.colors)
+    }
   }
 
   def getTileMarkerImage(tile: Tile): Option[String] = {

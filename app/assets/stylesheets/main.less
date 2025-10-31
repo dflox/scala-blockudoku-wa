@@ -10,6 +10,8 @@
 @shadow-color: rgba(0, 212, 255, 0.3);
 @tile-size: 50px;
 @tile-gap: 0px;
+@valid-color: #00ff99;
+@invalid-color: #ff0033;
 
 .tile-size-mobile() {
   @tile-size: 35px;
@@ -39,7 +41,7 @@ html {
   flex-direction: column;
 }
 
-#content {
+.content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -177,8 +179,16 @@ html {
   }
 }
 
+.preview-valid {
+    border: 2px solid @valid-color;
+}
+
+.preview-invalid {
+  border: 2px solid @invalid-color;
+}
+
 @media (max-width: 768px) {
-  #content {
+  .content {
     padding: 10px;
     gap: 10px;
   }
@@ -213,7 +223,7 @@ html {
 }
 
 @media (max-width: 480px) {
-  #content {
+  .content {
     padding: 8px;
     gap: 8px;
   }

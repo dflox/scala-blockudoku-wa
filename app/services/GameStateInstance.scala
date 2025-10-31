@@ -21,12 +21,9 @@ class GameStateInstance extends Window {
   private val previewBuilder = container.get[GridPreviewBuilder]
 
   private val consoleViews = initializeViews()
-  private var formatter = createFormatter(0, 0)
 
   private var colorIndex = scala.util.Random.nextInt(4)
   
-  private var currentPreview: Grid = gridCollector.getGrid
-
   private def initializeViews(): List[ConsoleView] = {
     var views: List[ConsoleView] = List()
 
@@ -50,31 +47,11 @@ class GameStateInstance extends Window {
     ConsoleElementView(commandFactory, commandInvoker, elementCollector, gridCollector,
       focusManager, this)
   }
-
-  private def createFormatter(selectedX: Int, selectedY: Int): ComposedConsoleFormatter = {
-    val verticalFrame = VerticalFrame(consoleViews.map(_.consoleElement))(0, isInteractable = true)
-    ComposedConsoleFormatter.create(verticalFrame, selectedX, selectedY)
-  }
-
-  def content: String = {
-    formatter = createFormatter(formatter.selectedX, formatter.selectedY)
-    formatter.content()
-  }
-
-  def navigate(direction: Direction): Unit = {
-    formatter = formatter.navigate(direction)
-  }
-
-  def select(): Unit = {
-    formatter.select()
-  }
-
-  def getGrid: Grid = {
-    gridCollector.getGrid
-  }
-
-  def getPreviewGrid(pos: Int): Grid = {
-    previewBuilder.buildGrid(pos)
+  
+  def getUniversalGridPreview: UniversalGridPreview = {
+    val selectedElement = elementCollector.getSelectedElement
+    val grid = gridCollector.getGrid
+    UniversalGridPreview(selectedElement, grid)
   }
 
   def getElements: List[blockudoku.models.Element] = {
@@ -96,18 +73,6 @@ class GameStateInstance extends Window {
       elementCollector.getSelectedElement.get,
       tileIndex)
     commandInvoker.execute(command)
-  }
-  
-  def getPreviewGridDiff(tileIndex: Int): Vector[Tile] = {
-    val newPreviewGrid = getPreviewGrid(tileIndex)
-    var tilesToUpdate: Vector[blockudoku.models.Tile] = Vector()
-    for (i <- currentPreview.tiles.indices) {
-      if currentPreview.tiles(i).state != newPreviewGrid.tiles(i).state then
-        tilesToUpdate = tilesToUpdate :+ newPreviewGrid.tiles(i)
-    }
-    tilesToUpdate = tilesToUpdate :+ newPreviewGrid.tiles(tileIndex)
-    currentPreview = newPreviewGrid
-    tilesToUpdate
   }
   
   def getColorIndex: Int = {

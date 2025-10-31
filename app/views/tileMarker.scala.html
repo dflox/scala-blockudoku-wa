@@ -1,27 +1,15 @@
 @import blockudoku.models.Tile
 @import util.HtmlUtilities
 
-@(gridTile: Tile, htmlUtil: HtmlUtilities, isElementSelected: Boolean)
+@(validPreview: List[Tile], invalidPreview: List[Tile], tileIndex: Int)
 <div
-    @(if (isElementSelected) "hx-trigger=mouseenter" else "")
-    hx-post="/preview/@gridTile.index"
-    hx-sync="closest .tile-marker-wrapper:drop"
-    id="tile@gridTile.index"
-    hx-swap-oob="true"
+    id="tile@tileIndex"
     class="tile-marker-wrapper"
->
-    @defining(htmlUtil.getTileMarkerImage(gridTile)){ image =>
-        @if(image.isDefined) {
-            <form
-                action="/place/@gridTile.index"
-                method="post"
-            >
-                <img
-                    class="tile-clickable"
-                    src="@image.get"
-                    onclick="this.closest('form').requestSubmit()"
-                >
-            </form>
-        }
-    }
+    data-previewvalid="@validPreview.map("tile" + _.index).mkString(",")"
+    data-previewinvalid="@invalidPreview.map("tile" + _.index).mkString(",")"
+    hx-trigger="click"
+    hx-post="/place/@tileIndex"
+    hx-swap="none"
+    >
+    @* hx-post is added via js *@
 </div>

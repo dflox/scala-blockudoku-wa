@@ -1,6 +1,0 @@
-@import blockudoku.models.Tile
-@import util.HtmlUtilities
-@(tiles: Vector[Tile], htmlUtil: HtmlUtilities, isElementSelected: Boolean)
-@for(tile <- tiles) {
-    @tileMarker(tile, htmlUtil, isElementSelected)
-}

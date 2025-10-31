@@ -1,39 +1,42 @@
 @import blockudoku.models.{Element, Grid}
 @import util.HtmlUtilities
-@(grid: Grid, elements: List[Element], htmlUtil: HtmlUtilities, isElementSelected: Boolean, schemeIndex: Int)
+@import services.UniversalGridPreview
+@(
+        universalGridPreview: UniversalGridPreview,
+        elements: List[Element],
+        htmlUtil: HtmlUtilities,
+        schemeIndex: Int)
 
-<div id="content">
+<div class="content">
     <div class="container">
-    @for(y <- 0 until grid.yLength) {
+    @for(y <- 0 until universalGridPreview.yLength) {
         <div class="row g-0 justify-content-center">
-        @for(x <- 0 until grid.xLength) {
-            @defining(grid.tile(x, y).get) { gridTile =>
+        @for(x <- 0 until universalGridPreview.xLength) {
                 <div class="col-auto">
-                    <div
-                    class="tile"
-                    >
+                    <div class="tile">
                         <img
-                        src="@routes.Assets.versioned(htmlUtil.getTileImage(gridTile, schemeIndex))"
+                        src="@routes.Assets.versioned(htmlUtil.getTileImage(
+                            universalGridPreview.getTile(x, y).get,
+                            schemeIndex))"
                         class="tile-background-image"
+                        loading="lazy"
                         >
-                        @tileMarker(gridTile, htmlUtil, isElementSelected)
                     </div>
                 </div>
-            }
         }
         </div>
-    }
+        }
     </div>
 </div>
 
 <div class="row justify-content-center">
-    <form action="/select/0" class="col-auto" method="POST">
-    @element(elements.head, htmlUtil, schemeIndex)
+    <div  class="col-auto" >
+    @element(elements.head, htmlUtil, schemeIndex, 0)
+    </div>
+    <form class="col-auto" method="POST">
+    @element(elements(1), htmlUtil, schemeIndex, 1)
     </form>
-    <form action="/select/1" class="col-auto" method="POST">
-    @element(elements(1), htmlUtil, schemeIndex)
-    </form>
-    <form action="/select/2" class="col-auto" method="POST">
-    @element(elements(2), htmlUtil, schemeIndex)
+    <form class="col-auto" method="POST">
+    @element(elements(2), htmlUtil, schemeIndex, 2)
     </form>
 </div>

@@ -1,6 +1,5 @@
 package controllers
 
-import blockudoku.views.console.composed.Direction.*
 import play.api.*
 import play.api.mvc.*
 import services.GameStateService
@@ -27,28 +26,11 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
   def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] => {
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
 
-    val grid = gameState.getGrid
+    val universalGridPreview = gameState.getUniversalGridPreview
     val elements = gameState.getElements
     val selectedElement = gameState.getSelectedElement
-    Ok(views.html.index(grid, elements, htmlUtilities, selectedElement.isDefined, gameState.getColorIndex))
-      .withGameStateKeyCookie(key)
-  }
-  }
-
-  def nextColor(): Action[AnyContent] = Action { implicit
-                                                          request: Request[AnyContent] => {
-    val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
-    gameState.nextColorScheme()
-    Ok("")
-      .withGameStateKeyCookie(key)
-  }
-  }
-  
-  def prevColor(): Action[AnyContent] = Action { implicit
-                                                          request: Request[AnyContent] => {
-    val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
-    gameState.prevColorScheme()
-    Ok("")
+    Ok(views.html.index(universalGridPreview, elements, htmlUtilities,
+      gameState.getColorIndex))
       .withGameStateKeyCookie(key)
   }
   }
@@ -61,29 +43,17 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
   }
   }
 
-  def direction(dir: String): Action[AnyContent] = Action
-    { implicit request: Request[AnyContent] => {
-      val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
-
-      gameState.navigate(dir match {
-        case "up" => Up
-        case "down" => Down
-        case "left" => Left
-        case "right" => Right
-      })
-      Redirect(routes.HomeController.index())
-        .withGameStateKeyCookie(key)
-    }
-    }
-
   def selectElement(ind: Int): Action[AnyContent] = Action { implicit
                                                              request: Request[AnyContent] => {
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
 
     gameState.selectElement(ind)
-    Redirect(routes.HomeController.index())
-      .withGameStateKeyCookie(key)
-  }
+    Ok(views.html.carousel(
+      gameState.getUniversalGridPreview,
+      gameState.getElements,
+      htmlUtilities,
+      gameState.getColorIndex))
+      .withGameStateKeyCookie(key)  }
   }
 
   def placeElement(tileIndex: Int): Action[AnyContent] = Action { implicit
@@ -91,21 +61,34 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
 
     gameState.placeElement(tileIndex)
-    Redirect(routes.HomeController.index())
+
+    if(gameState.getSelectedElement.isEmpty)
+      Ok(views.html.carousel(
+        gameState.getUniversalGridPreview,
+        gameState.getElements,
+        htmlUtilities,
+        gameState.getColorIndex))
+        .withGameStateKeyCookie(key)
+    else
+      Ok("")
+        .withGameStateKeyCookie(key)
+  }
+  }
+
+  def nextColor(): Action[AnyContent] = Action { implicit
+                                                 request: Request[AnyContent] => {
+    val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
+    gameState.nextColorScheme()
+    Ok("")
       .withGameStateKeyCookie(key)
   }
   }
 
-  def getPreview(tileIndex: Int): Action[AnyContent] = Action { implicit
-                                                                request: Request[AnyContent] => {
+  def prevColor(): Action[AnyContent] = Action { implicit
+                                                 request: Request[AnyContent] => {
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
-
-    val previewGrid = gameState.getPreviewGrid(tileIndex)
-    val tilesToUpdate = gameState.getPreviewGridDiff(tileIndex)
-
-    val isElementSelected = gameState.getSelectedElement.isDefined
-
-    Ok(views.html.tileUpdate(tilesToUpdate, htmlUtilities, isElementSelected))
+    gameState.prevColorScheme()
+    Ok("")
       .withGameStateKeyCookie(key)
   }
   }

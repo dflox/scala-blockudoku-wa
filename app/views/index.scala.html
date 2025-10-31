@@ -1,42 +1,8 @@
 @import blockudoku.models.{Element, Grid}
 @import util.HtmlUtilities
-@(grid: Grid, elements: List[Element], htmlUtil: HtmlUtilities, isElementSelected: Boolean, schemeIndex: Int)
+@import services.UniversalGridPreview
+@(universalGridPreview: UniversalGridPreview, elements: List[Element], htmlUtil: HtmlUtilities, schemeIndex: Int)
 
 @main() {
-    <div id="carouselExampleFade" class="carousel slide carousel-fade">
-        <div class="carousel-inner">
-            <div class="@("carousel-item" + (if (schemeIndex == 0) " active" else ""))">
-            @gameboard(grid, elements, htmlUtil, isElementSelected, 0)
-            </div>
-            <div class="@("carousel-item" + (if (schemeIndex == 1) " active" else ""))">
-            @gameboard(grid, elements, htmlUtil, isElementSelected, 1)
-            </div>
-            <div class="@("carousel-item" + (if (schemeIndex == 2) " active" else ""))">
-            @gameboard(grid, elements, htmlUtil, isElementSelected, 2)
-            </div>
-            <div class="@("carousel-item" + (if (schemeIndex == 3) " active" else ""))">
-            @gameboard(grid, elements, htmlUtil, isElementSelected, 3)
-            </div>
-        </div>
-        <form class="d-inline"
-        hx-post="update/color/prev"
-        hx-trigger="click"
-        hx-swap="none"
-        method="post">
-            <button class="carousel-control-prev" type="submit" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-        </form>
-        <form class="d-inline"
-            hx-post="update/color/next"
-            hx-trigger="click"
-            hx-swap="none"
-            method="post">
-            <button class="carousel-control-next" type="submit" data-bs-target="#carouselExampleFade" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </form>
-    </div>
+    @carousel(universalGridPreview, elements, htmlUtil, schemeIndex)
 }

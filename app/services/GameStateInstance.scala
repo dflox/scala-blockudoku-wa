@@ -23,6 +23,8 @@ class GameStateInstance extends Window {
   private val consoleViews = initializeViews()
   private var formatter = createFormatter(0, 0)
 
+  private var colorIndex = scala.util.Random.nextInt(4)
+  
   private var currentPreview: Grid = gridCollector.getGrid
 
   private def initializeViews(): List[ConsoleView] = {
@@ -107,7 +109,19 @@ class GameStateInstance extends Window {
     currentPreview = newPreviewGrid
     tilesToUpdate
   }
+  
+  def getColorIndex: Int = {
+    colorIndex
+  }
 
+  def nextColorScheme() : Unit = {
+    colorIndex = (colorIndex + 1) % 4
+  }
+  
+  def prevColorScheme() : Unit = {
+    colorIndex = (colorIndex - 1 + 4) % 4
+  }
+  
   override def display(): Unit = {
 
   }

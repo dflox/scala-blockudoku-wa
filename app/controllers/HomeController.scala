@@ -17,7 +17,8 @@ extension (result: Result)
 class HomeController @Inject()(val controllerComponents: ControllerComponents,
                                val htmlUtilities: HtmlUtilities,
                                val gameStateService: GameStateService) extends BaseController {
-  private def getStateKeyCookie(implicit request: Request[AnyContent]): Option[String] = request.cookies
+  private def getStateKeyCookie(implicit request: Request[AnyContent]): Option[String] = request
+    .cookies
     .get(COOKIE_KEY) match {
     case Some(cookie) => Some(cookie.value)
     case None => None
@@ -29,24 +30,51 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
     val grid = gameState.getGrid
     val elements = gameState.getElements
     val selectedElement = gameState.getSelectedElement
-    Ok(views.html.index(grid, elements, htmlUtilities, selectedElement.isDefined))
+    Ok(views.html.index(grid, elements, htmlUtilities, selectedElement.isDefined, gameState.getColorIndex))
       .withGameStateKeyCookie(key)
   }
   }
 
-  def direction(dir: String): Action[AnyContent] = Action { implicit request: Request[AnyContent] => {
+  def nextColor(): Action[AnyContent] = Action { implicit
+                                                          request: Request[AnyContent] => {
     val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
+    gameState.nextColorScheme()
+    Ok("")
+      .withGameStateKeyCookie(key)
+  }
+  }
+  
+  def prevColor(): Action[AnyContent] = Action { implicit
+                                                          request: Request[AnyContent] => {
+    val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
+    gameState.prevColorScheme()
+    Ok("")
+      .withGameStateKeyCookie(key)
+  }
+  }
 
-    gameState.navigate(dir match {
-      case "up" => Up
-      case "down" => Down
-      case "left" => Left
-      case "right" => Right
-    })
+  def newGame(): Action[AnyContent] = Action { implicit
+                                               request: Request[AnyContent] => {
+    val (key, gameState) = gameStateService.getInstance(None)
     Redirect(routes.HomeController.index())
       .withGameStateKeyCookie(key)
   }
   }
+
+  def direction(dir: String): Action[AnyContent] = Action
+    { implicit request: Request[AnyContent] => {
+      val (key, gameState) = gameStateService.getInstance(getStateKeyCookie)
+
+      gameState.navigate(dir match {
+        case "up" => Up
+        case "down" => Down
+        case "left" => Left
+        case "right" => Right
+      })
+      Redirect(routes.HomeController.index())
+        .withGameStateKeyCookie(key)
+    }
+    }
 
   def selectElement(ind: Int): Action[AnyContent] = Action { implicit
                                                              request: Request[AnyContent] => {

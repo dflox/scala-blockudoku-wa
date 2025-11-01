@@ -43,7 +43,9 @@ class FileController @Inject()(val controllerComponents: ControllerComponents,
     val (gameKey, gameState) = gameStateService.getInstance(getStateKeyCookie)
     val gameFile = persistenceService.saveGameState(gameState, gameKey)
 
-    Ok.sendFile(content = gameFile, inline = false, fileName = f => Some(f.getName))
+    Ok.sendFile(content = gameFile, inline = false, fileName = f => Some(f.getName), onClose = () => {
+      gameFile.delete()
+    })
       .withGameStateKeyCookie(gameKey)
   }
   }

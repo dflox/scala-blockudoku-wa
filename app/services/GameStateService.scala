@@ -19,6 +19,12 @@ class GameStateService {
 
     (key, instance)
   }
+  
+  def setInstance(key: Option[String], instance: GameStateInstance): String = {
+    val actualKey = key.getOrElse(newKey)
+    instances(actualKey) = instance
+    actualKey
+  }
 
   def getInstance(keyOption: Option[String]): (String, GameStateInstance) = {
     keyOption match {

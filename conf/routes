@@ -1,9 +1,12 @@
 GET         /                          controllers.HomeController.index()
 
-POST        /select/:ind               controllers.HomeController.selectElement(ind: Int)
-POST        /place/:tileIndex          controllers.HomeController.placeElement(tileIndex: Int)
+POST        /select/:ind               controllers.GameController.selectElement(ind: Int)
+POST        /place/:tileIndex          controllers.GameController.placeElement(tileIndex: Int)
 GET         /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)
 
 POST        /new                     controllers.HomeController.newGame()
 POST        /update/color/next  controllers.HomeController.nextColor()
 POST        /update/color/prev  controllers.HomeController.prevColor()
+
+POST    /upload            controllers.FileController.uploadGame
+GET     /download          controllers.FileController.downloadGame

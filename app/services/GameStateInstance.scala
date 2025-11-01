@@ -2,13 +2,11 @@ package services
 
 import blockudoku.commands.{CommandFactory, CommandInvoker}
 import blockudoku.controllers.{ElementCollector, GridCollector}
-import blockudoku.models.{Grid, Tile}
-import blockudoku.windows.{FocusManager, Window}
-import io.gitlab.freeeezee.yadis.ComponentContainer
 import blockudoku.registerComponents
 import blockudoku.services.GridPreviewBuilder
-import blockudoku.views.console.composed.{ComposedConsoleFormatter, Direction, VerticalFrame}
 import blockudoku.views.console.{ConsoleElementView, ConsoleGridView, ConsoleHeadlineView, ConsoleView}
+import blockudoku.windows.{FocusManager, Window}
+import io.gitlab.freeeezee.yadis.ComponentContainer
 
 class GameStateInstance extends Window {
   private val container = ComponentContainer().registerComponents().buildProvider()
@@ -19,6 +17,8 @@ class GameStateInstance extends Window {
   private val elementCollector = container.get[ElementCollector]
   private val focusManager = container.get[FocusManager]
   private val previewBuilder = container.get[GridPreviewBuilder]
+  private val scoreCollector = container.get[blockudoku.controllers.ScoreCollector]
+  private val serializer = container.get[blockudoku.saving.Serializer]
 
   private val consoleViews = initializeViews()
 
@@ -75,6 +75,10 @@ class GameStateInstance extends Window {
     commandInvoker.execute(command)
   }
   
+  def toJson: String = {
+    serializer.serialize()
+  }
+  
   def getColorIndex: Int = {
     colorIndex
   }
@@ -93,5 +97,13 @@ class GameStateInstance extends Window {
 
   override def setUpdated(): Unit = {
 
+  }
+}
+
+object GameStateInstance {
+  def fromJson(data: String): GameStateInstance = {
+    val instance = new GameStateInstance()
+    instance.serializer.deserialize(data)
+    instance
   }
 }

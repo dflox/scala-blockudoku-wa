@@ -12,6 +12,8 @@
 @tile-gap: 0px;
 @valid-color: #0adc4d;
 @invalid-color: #ff0033;
+@modal-bg-color: #2a2a4a;
+@modal-border-color: #0099cc;
 
 .tile-size-mobile() {
   @tile-size: 35px;
@@ -207,6 +209,28 @@ html {
 
 input[type="file"] {
   display: none;
+}
+
+.modal {
+  --bs-modal-bg: @modal-bg-color;
+  --bs-modal-color: white;
+  --bs-modal-border-color: @modal-border-color;
+  --bs-modal-header-border-color: @modal-border-color;
+  --bs-modal-footer-border-color: @modal-border-color;
+}
+
+.nav {
+  --bs-nav-tabs-border-color: @modal-border-color;
+  --bs-nav-tabs-link-active-color: white;
+  --bs-nav-tabs-link-active-bg: @modal-border-color;
+  --bs-nav-tabs-link-active-border-color: @modal-border-color;
+  --bs-nav-tabs-link-hover-border-color: @modal-border-color;
+  --bs-nav-link-color: white;
+  --bs-nav-link-hover-color: white;
+}
+
+.btn-close {
+  --bs-btn-close-color: white;
 }
 
 @media (max-width: 768px) {

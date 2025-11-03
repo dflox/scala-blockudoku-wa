@@ -34,7 +34,6 @@
         @helper.form(action = routes.FileController.uploadGame, Symbol("enctype") -> "multipart/form-data") {
             <input class="btn-primary-bd" type="file" name="gameFile" onchange="this.form.submit()">
         }
-        @toast()
     </div>
 
     <div class="tab-pane fade" id="aboutTab" role="tabpanel">About</div>

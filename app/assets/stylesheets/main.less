@@ -15,18 +15,6 @@
 @modal-bg-color: #2a2a4a;
 @modal-border-color: #0099cc;
 
-.tile-size-mobile() {
-  @tile-size: 35px;
-}
-
-.tile-size-tablet() {
-  @tile-size: 45px;
-}
-
-.tile-size-desktop() {
-  @tile-size: 50px;
-}
-
 html {
   background-color: @bg-gradient-start;
 }
@@ -97,11 +85,6 @@ html {
   padding: 0;
   position: relative;
   transition: transform 0.2s ease;
-
-  //&:hover {
-  //  transform: scale(1.05);
-  //  z-index: 100;
-  //}
 }
 
 .tile {
@@ -170,7 +153,7 @@ html {
   justify-content: center;
   gap: 15px;
   padding: 0 20px;
-  }
+}
 
 .elementSelector {
   background: rgba(0, 0, 0, 0.3);
@@ -308,6 +291,12 @@ input[type="file"] {
   .tile {
     height: 35px;
     width: 35px;
+  }
+
+  .btn-carousel-control-bd{
+    // position carousel buttons at the button
+    top: auto;
+    bottom: 10px;
   }
 }
 

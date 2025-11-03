@@ -14,31 +14,43 @@
 
 <div class="tab-content mt-3">
     <div class="tab-pane fade show active" id="gameTab" role="tabpanel">
+        <p class="sub-title">Color Settings</p>
         <div class="drowdown mb-3">
-        <button class="btn btn-primary-bd dropdown-toggle" type="button" id="colorSchemeDropdown"
-        data-bs-toggle="dropdown" aria-expanded="false">
-        Change Color Scheme
-        </button>
-        <ul class="dropdown-menu">
-            <li><button class="dropdown-item" id="btnAquatic">Aquatic</button></li>
-            <li><button class="dropdown-item" id="btnTropical">Tropical</button></li>
-            <li><button class="dropdown-item" id="btnHellfire">Hellfire</button></li>
-            <li><button class="dropdown-item" id="btnRetro">Retro</button></li>
-        </ul>
-    </div>
+            <button class="btn btn-primary-bd dropdown-toggle" type="button" id="colorSchemeDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Change Color Scheme
+            </button>
+            <ul class="dropdown-menu">
+                <li><button class="dropdown-item" id="btnAquatic">Aquatic</button></li>
+                <li><button class="dropdown-item" id="btnTropical">Tropical</button></li>
+                <li><button class="dropdown-item" id="btnHellfire">Hellfire</button></li>
+                <li><button class="dropdown-item" id="btnRetro">Retro</button></li>
+            </ul>
+        </div>
+        <p class="sub-title">Save and Load</p>
         <div class="d-flex flex-row gap-2">
             <a href="@routes.FileController.downloadGame">
-                <button type="button" class="btn btn-primary btn-primary-bd" id="download-btn">Save Current Game
-                    state</button>
+                <button type="button" class="btn btn-primary btn-primary-bd" id="download-btn">
+                    Save Game
+                </button>
             </a>
             @helper.form(action = routes.FileController.uploadGame, Symbol("enctype") -> "multipart/form-data") {
                 <label class="btn btn-primary btn-primary-bd">
-                    Upload Game State
+                    Upload Game
                     <input type="file" name="gameFile" onchange="this.form.submit()">
                 </label>
             }
         </div>
     </div>
 
-    <div class="tab-pane fade" id="aboutTab" role="tabpanel">About</div>
+    <div class="tab-pane fade" id="aboutTab" role="tabpanel">
+        <p class="sub-title">
+            About
+        </p>
+        <p>This is a clone of the mobile game <a href="https://apps.apple
+            .com/de/app/blockudoku-block-puzzle/id1452227871?l=en-GB">Blockudoku</a> written in Scala by
+            Florian Dritter and Tom Berger. <br>
+            This project is an academic project at HTWG Konstanz.
+        </p>
+    </div>
 </div>

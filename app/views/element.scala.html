@@ -2,7 +2,7 @@
 @import util.HtmlUtilities
 
 @(element: Element, htmlUtil: HtmlUtilities, schemeIndex: Int, elementIndex: Int)
-<div class="container"  hx-trigger="click"
+<div class="container" role="button" hx-trigger="click"
 hx-post="/select/@elementIndex"
 hx-swap="none" >
     @for(y <- element.dimensions._4 to element.dimensions._3 by -1) {

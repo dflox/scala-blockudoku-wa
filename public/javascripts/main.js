@@ -1,4 +1,4 @@
-htmx.onLoad( () => {
+htmx.onLoad(() => {
     document.querySelectorAll('.tile-marker-wrapper').forEach(block => {
         block.addEventListener('mouseenter', () => {
             document.querySelectorAll('.tile-marker-wrapper').forEach(el => el.classList.remove('preview-valid', 'preview-invalid'));
@@ -9,23 +9,23 @@ htmx.onLoad( () => {
             document.querySelectorAll('.tile-marker-wrapper').forEach(el => el.classList.remove('preview-valid', 'preview-invalid'));
         });
     });
+
+    const carouselElement = document.querySelector('#colorCarousel');
+    const carousel = new bootstrap.Carousel(carouselElement);
+
+    document.querySelector('#btnAquatic').addEventListener('click', () => {
+        carousel.to(1);
+    });
+
+    document.querySelector('#btnHellfire').addEventListener('click', () => {
+        carousel.to(3);
+    });
+
+    document.querySelector('#btnRetro').addEventListener('click', () => {
+        carousel.to(0);
+    });
+
+    document.querySelector('#btnTropical').addEventListener('click', () => {
+        carousel.to(2);
+    });
 })
-
-const carouselElement = document.querySelector('#colorCarousel');
-const carousel = new bootstrap.Carousel(carouselElement);
-
-document.querySelector('#btnAquatic').addEventListener('click', () => {
-    carousel.to(1);
-});
-
-document.querySelector('#btnHellfire').addEventListener('click', () => {
-    carousel.to(3);
-});
-
-document.querySelector('#btnRetro').addEventListener('click', () => {
-    carousel.to(0);
-});
-
-document.querySelector('#btnTropical').addEventListener('click', () => {
-    carousel.to(2);
-});

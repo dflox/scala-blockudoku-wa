@@ -28,7 +28,7 @@ class FileController @Inject()(val controllerComponents: ControllerComponents,
           case Some(state) =>
             val gameKey = gameStateService.setInstance(getStateKeyCookie(request), state)
             Redirect(routes.HomeController.index())
-              .flashing("success" -> s"File '${upload.filename}' uploaded successfully!")
+              .flashing("success" -> "true")
               .withGameStateKeyCookie(gameKey)
           case None =>
             BadRequest("Invalid game file")

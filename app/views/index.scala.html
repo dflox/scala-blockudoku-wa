@@ -1,7 +1,7 @@
 @import blockudoku.models.{Element, Grid}
 @import util.HtmlUtilities
 @import services.UniversalGridPreview
-@(universalGridPreview: UniversalGridPreview, elements: List[Element], htmlUtil: HtmlUtilities, schemeIndex: Int)
+@(universalGridPreview: UniversalGridPreview, elements: List[Element], htmlUtil: HtmlUtilities, schemeIndex: Int)(implicit flash: Flash)
 
 @main() {
     @carousel(universalGridPreview, elements, htmlUtil, schemeIndex)
@@ -16,4 +16,5 @@
             </p>
         }
     </div>
+    @toast()
 }

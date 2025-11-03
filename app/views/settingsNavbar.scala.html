@@ -30,12 +30,12 @@
         <p class="sub-title">Save and Load</p>
         <div class="d-flex flex-row gap-2">
             <a href="@routes.FileController.downloadGame">
-                <button type="button" class="btn btn-primary btn-primary-bd" id="download-btn">
+                <button type="button" class="btn btn-primary btn-primary-bd" id="download-btn" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Download your current game state in a json file">
                     Save Game
                 </button>
             </a>
             @helper.form(action = routes.FileController.uploadGame, Symbol("enctype") -> "multipart/form-data") {
-                <label class="btn btn-primary btn-primary-bd">
+                <label class="btn btn-primary btn-primary-bd" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Upload a previously downloaded save file">
                     Upload Game
                     <input type="file" name="gameFile" onchange="this.form.submit()">
                 </label>

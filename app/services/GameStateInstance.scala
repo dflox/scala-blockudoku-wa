@@ -8,6 +8,8 @@ import blockudoku.views.console.{ConsoleElementView, ConsoleGridView, ConsoleHea
 import blockudoku.windows.{FocusManager, Window}
 import io.gitlab.freeeezee.yadis.ComponentContainer
 
+import scala.util.{Failure, Success, Try}
+
 class GameStateInstance extends Window {
   private val container = ComponentContainer().registerComponents().buildProvider()
 
@@ -89,6 +91,15 @@ class GameStateInstance extends Window {
   
   def prevColorScheme() : Unit = {
     colorIndex = (colorIndex - 1 + 4) % 4
+  }
+
+  def setColorScheme(ind: Int): Try[Unit] = {
+    if (ind >=0 && ind < 4) {
+      colorIndex = ind
+      Success(())
+    } else {
+      Failure(new IllegalArgumentException("Color index out of bounds"))
+    }
   }
   
   override def display(): Unit = {

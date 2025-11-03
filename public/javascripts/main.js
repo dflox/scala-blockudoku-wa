@@ -15,17 +15,21 @@ htmx.onLoad(() => {
 
     document.querySelector('#btnAquatic').addEventListener('click', () => {
         carousel.to(1);
+        fetch('/update/color/1', {method: 'POST'});
     });
 
     document.querySelector('#btnHellfire').addEventListener('click', () => {
         carousel.to(3);
+        fetch('/update/color/1', {method: 'POST'});
     });
 
     document.querySelector('#btnRetro').addEventListener('click', () => {
         carousel.to(0);
+        fetch('/update/color/0', {method: 'POST'});
     });
 
     document.querySelector('#btnTropical').addEventListener('click', () => {
         carousel.to(2);
+        fetch('/update/color/2', {method: 'POST'});
     });
 })

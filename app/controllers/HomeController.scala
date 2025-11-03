@@ -6,6 +6,7 @@ import services.GameStateService
 import util.*
 
 import javax.inject.*
+import scala.util.{Failure, Success}
 
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents,
@@ -47,6 +48,19 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
     gameState.prevColorScheme()
     Ok("")
       .withGameStateKeyCookie(gameKey)
+  }
+  }
+
+  def setColor(ind: Int): Action[AnyContent] = Action { implicit
+                                                   request: Request[AnyContent] => {
+    val (gameKey, gameState) = gameStateService.getInstance(getStateKeyCookie)
+    gameState.setColorScheme(ind) match {
+      case Success(_) =>
+        Ok("")
+          .withGameStateKeyCookie(gameKey)
+      case Failure(_) =>
+        BadRequest("Invalid color index")
+    }
   }
   }
 }

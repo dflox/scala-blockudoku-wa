@@ -7,6 +7,7 @@ GET         /assets/*file              controllers.Assets.versioned(path="/publi
 POST        /new                     controllers.HomeController.newGame()
 POST        /update/color/next  controllers.HomeController.nextColor()
 POST        /update/color/prev  controllers.HomeController.prevColor()
+POST        /update/color/:ind controllers.HomeController.setColor(ind: Int)
 
 POST    /upload            controllers.FileController.uploadGame
 GET     /download          controllers.FileController.downloadGame

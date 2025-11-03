@@ -10,3 +10,22 @@ htmx.onLoad( () => {
         });
     });
 })
+
+const carouselElement = document.querySelector('#colorCarousel');
+const carousel = new bootstrap.Carousel(carouselElement);
+
+document.querySelector('#btnAquatic').addEventListener('click', () => {
+    carousel.to(1);
+});
+
+document.querySelector('#btnHellfire').addEventListener('click', () => {
+    carousel.to(3);
+});
+
+document.querySelector('#btnRetro').addEventListener('click', () => {
+    carousel.to(0);
+});
+
+document.querySelector('#btnTropical').addEventListener('click', () => {
+    carousel.to(2);
+});

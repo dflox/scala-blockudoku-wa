@@ -1,0 +1,41 @@
+@()
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#gameTab"
+        type="button"
+        role="tab">Game</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#aboutTab"
+        type="button"
+        role="tab">About</button>
+    </li>
+</ul>
+
+<div class="tab-content mt-3">
+    <div class="tab-pane fade show active" id="gameTab" role="tabpanel">
+        <div class="drowdown mb-3">
+        <button class="btn btn-primary-bd dropdown-toggle" type="button" id="colorSchemeDropdown"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        Change Color Scheme
+        </button>
+        <ul class="dropdown-menu">
+            <li><button class="dropdown-item" id="btnAquatic">Aquatic</button></li>
+            <li><button class="dropdown-item" id="btnTropical">Tropical</button></li>
+            <li><button class="dropdown-item" id="btnHellfire">Hellfire</button></li>
+            <li><button class="dropdown-item" id="btnRetro">Retro</button></li>
+        </ul>
+    </div>
+
+        <a href="@routes.FileController.downloadGame">
+            <button type="button" class="btn btn-primary-bd">Save Current Game
+                state</button>
+        </a>
+        @helper.form(action = routes.FileController.uploadGame, Symbol("enctype") -> "multipart/form-data") {
+            <input class="btn-primary-bd" type="file" name="gameFile" onchange="this.form.submit()">
+        }
+        @toast()
+    </div>
+
+    <div class="tab-pane fade" id="aboutTab" role="tabpanel">About</div>
+</div>

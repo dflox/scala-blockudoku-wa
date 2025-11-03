@@ -187,12 +187,19 @@ html {
   border: 5px solid @invalid-color;
 }
 
-@media (max-width: 768px) {
-  .content {
-    padding: 10px;
-    gap: 10px;
-  }
+.btn-primary-bd {
+  --bs-btn-bg: @secondary-color;
+  --bs-btn-hover-bg: white;
+  --bs-btn-color: white;
+  --bs-btn-hover-color: @bg-gradient-start;
+  --bs-btn-border-color: transparent;
+}
 
+.btn-primary-bd:hover {
+  box-shadow: 0 0 1rem @shadow-color;
+}
+
+@media (max-width: 768px) {
   .title {
     margin: 2% 0 8px 0;
     font-size: clamp(20px, 5vw, 32px);
@@ -223,11 +230,6 @@ html {
 }
 
 @media (max-width: 480px) {
-  .content {
-    padding: 8px;
-    gap: 8px;
-  }
-
   .title {
     margin: 2% 0 5px 0;
     font-size: clamp(18px, 5vw, 28px);

@@ -5,13 +5,15 @@
 
 @main() {
     @carousel(universalGridPreview, elements, htmlUtil, schemeIndex)
-    <a href="@routes.FileController.downloadGame">
-        <button type="button">Download Current File</button>
-    </a>
-    @helper.form(action = routes.FileController.uploadGame, Symbol("enctype") -> "multipart/form-data") {
-        <input type="file" name="gameFile">
-        <p>
-            <input type="submit">
-        </p>
-    }
+    <div class="container">
+        <a href="@routes.FileController.downloadGame">
+            <button type="button" class="btn btn-primary btn-primary-bd">Download Current File</button>
+        </a>
+        @helper.form(action = routes.FileController.uploadGame, Symbol("enctype") -> "multipart/form-data") {
+            <input type="file" name="gameFile">
+            <p>
+                <input type="submit">
+            </p>
+        }
+    </div>
 }

@@ -4,6 +4,7 @@
 @(universalGridPreview: UniversalGridPreview, elements: List[Element], htmlUtil: HtmlUtilities, schemeIndex: Int)(implicit flash: Flash)
 
 @main() {
+    @animatedBg(htmlUtil, schemeIndex)
     @carousel(universalGridPreview, elements, htmlUtil, schemeIndex)
     @settingsButton()
     @toast()

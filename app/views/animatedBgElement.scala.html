@@ -1,0 +1,28 @@
+@import util.HtmlUtilities
+@import blockudoku.models.{Element, TileState, Tile, Point}
+
+@(element: Element, htmlUtil: HtmlUtilities, schemeIndex: Int)
+<div class="container animated-bg-element">
+@for(y <- element.dimensions._4 to element.dimensions._3 by -1) {
+    <div class="row">
+    @for(x <- element.dimensions._1 to element.dimensions._2) {
+        <div class="col-auto tile-frames">
+        @if(element.structure.contains(Point(x, y))) {
+            @defining(Tile(0, Point(0,0), element.colors, TileState.blocked)) { gridTile =>
+
+                <div
+                class="tile"
+                >
+                    <img
+                    src="@routes.Assets.versioned(htmlUtil.getTileImage(gridTile,
+                        schemeIndex))"
+                    class="tile-background-image"
+                    >
+                </div>
+            }
+        }
+        </div>
+    }
+    </div>
+}
+</div>

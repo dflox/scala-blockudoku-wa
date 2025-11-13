@@ -18,26 +18,24 @@
         @gameboard(universalGridPreview, elements, htmlUtil, 3)
         </div>
     </div>
-    @if(universalGridPreview.isElementSelected){
-        <div class="position-absolute top-0 start-0 w-100 h-100">
-            <div class="container">
-            @for(y <- 0 until universalGridPreview.yLength) {
-                <div class="row g-0 justify-content-center">
-                @for(x <- 0 until universalGridPreview.xLength) {
-                    <div class="col-auto">
-                        <div class="tile">
-                        @tileMarker(
-                            universalGridPreview.getValidTiles(x, y),
-                            universalGridPreview.getInvalidTiles(x, y),
-                            x + y * universalGridPreview.xLength)
-                        </div>
+    <div class="position-absolute top-0 start-0 w-100 h-100">
+        <div id = "marker-grid" class="container">
+        @for(y <- 0 until universalGridPreview.yLength) {
+            <div class="row g-0 justify-content-center">
+            @for(x <- 0 until universalGridPreview.xLength) {
+                <div class="col-auto">
+                    <div class="tile">
+                    @tileMarker(
+                        universalGridPreview.getValidTiles(x, y),
+                        universalGridPreview.getInvalidTiles(x, y),
+                        x + y * universalGridPreview.xLength)
                     </div>
-                }
                 </div>
             }
             </div>
+        }
         </div>
-    }
+    </div>
 
     <div class="key-control ui-helper-hidden">
         @for(i <- elements.indices) {

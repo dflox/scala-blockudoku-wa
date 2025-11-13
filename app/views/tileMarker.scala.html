@@ -1,12 +1,16 @@
 @import blockudoku.models.Tile
 @import util.HtmlUtilities
 
-@(validPreview: List[Tile], invalidPreview: List[Tile], tileIndex: Int)
+@(validPreview: Map[Int, List[Tile]], invalidPreview: Map[Int, List[Tile]], tileIndex: Int)
 <div
     id="tile@tileIndex"
     class="tile-marker-wrapper"
-    data-previewvalid="@validPreview.map("tile" + _.index).mkString(",")"
-    data-previewinvalid="@invalidPreview.map("tile" + _.index).mkString(",")"
+    data-previewvalid0="@validPreview(0).map("tile" + _.index).mkString(",")"
+    data-previewinvalid0="@invalidPreview(0).map("tile" + _.index).mkString(",")"
+    data-previewvalid1="@validPreview(1).map("tile" + _.index).mkString(",")"
+    data-previewinvalid1="@invalidPreview(1).map("tile" + _.index).mkString(",")"
+    data-previewvalid2="@validPreview(2).map("tile" + _.index).mkString(",")"
+    data-previewinvalid2="@invalidPreview(2).map("tile" + _.index).mkString(",")"
     hx-trigger="click"
     hx-post="/place/@tileIndex"
     hx-swap="none"

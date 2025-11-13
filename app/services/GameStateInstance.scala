@@ -51,7 +51,7 @@ class GameStateInstance extends Window {
   }
   
   def getUniversalGridPreview: UniversalGridPreview = {
-    val selectedElement = elementCollector.getSelectedElement
+    val selectedElement = elementCollector.getElements
     val grid = gridCollector.getGrid
     UniversalGridPreview(selectedElement, grid)
   }

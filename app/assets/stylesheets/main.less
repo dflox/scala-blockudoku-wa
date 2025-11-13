@@ -79,6 +79,20 @@ html {
   backdrop-filter: blur(10px);
 }
 
+.element {
+  display: grid;
+  cursor: move;
+  touch-action: none;
+  position: relative;
+  //grid-template-columns: repeat(2, 60px);
+  //grid-template-rows: repeat(2, 60px);
+}
+
+.element.dragging {
+  opacity: 0.7;
+  z-index: 2000;
+}
+
 .tile-frames {
   height: @tile-size;
   width: @tile-size;
@@ -110,14 +124,6 @@ html {
     z-index: 2;
   }
  }
-
-.tile-clickable {
-  height: 100%;
-  width: 100%;
-  cursor: pointer;
-  position: relative;
-  z-index: 5;
-}
 
 .tile-marker-wrapper {
   position: absolute;
@@ -155,28 +161,17 @@ html {
   padding: 0 20px;
 }
 
-.elementSelector {
-  background: rgba(0, 0, 0, 0.3);
-  padding: 12px;
-  color: @text-secondary;
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  backdrop-filter: blur(5px);
-  max-width: 90vw;
-  overflow-x: auto;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:active {
-    transform: translateY(0);
-  }
-}
-
 .preview-valid {
   border: 5px solid @valid-color;
 }
 
 .preview-invalid {
   border: 5px solid @invalid-color;
+}
+
+.invalid {
+  opacity: 0.5;
+  background: linear-gradient(145deg, @invalid-color, darken(@invalid-color, 20%));
 }
 
 .btn-primary-bd {
@@ -238,10 +233,6 @@ input[type="file"] {
     margin-top: 8px;
   }
 
-  .elementSelector {
-    padding: 10px;
-  }
-
   .tile-frames {
     height: 45px;
     width: 45px;
@@ -276,10 +267,6 @@ input[type="file"] {
       width: 100%;
       max-width: 300px;
     }
-  }
-
-  .elementSelector {
-    padding: 8px;
   }
 
   .tile-frames {

@@ -2,9 +2,13 @@
 @import util.HtmlUtilities
 
 @(element: Element, htmlUtil: HtmlUtilities, schemeIndex: Int, elementIndex: Int)
-<div class="container" role="button" hx-trigger="click"
-hx-post="/select/@elementIndex"
-hx-swap="none" >
+<div class="container element"
+role="button"
+@*hx-trigger="click"*@
+@*hx-post="/select/@elementIndex"*@
+@*hx-swap="none"*@
+data-ind="@elementIndex"
+>
     @for(y <- element.dimensions._4 to element.dimensions._3 by -1) {
         <div class="row">
             @for(x <- element.dimensions._1 to element.dimensions._2) {
@@ -19,6 +23,7 @@ hx-swap="none" >
                                     src="@routes.Assets.versioned(htmlUtil.getTileImage(gridTile,
                                         schemeIndex))"
                                     class="tile-background-image"
+                                    draggable="false"
                                     >
                                 </div>
                         }

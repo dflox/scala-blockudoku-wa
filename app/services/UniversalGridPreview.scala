@@ -3,9 +3,12 @@ package services
 import blockudoku.models.TileState.{blocked, empty, previewInvalid, previewValid}
 import blockudoku.models.{Element, Grid, Tile}
 
-class UniversalGridPreview(private val element: Option[Element], private val grid: Grid) {
+import scala.collection.{immutable, mutable}
+import scala.collection.mutable.Map;
 
-  def UniversalGridPreview(element: Option[Element], grid: Grid)
+class UniversalGridPreview(private val element: List[Element], private val grid: Grid) {
+
+  def UniversalGridPreview(element: List[Element], grid: Grid)
   : UniversalGridPreview = {
     var normalizedGrid = grid.copyWithNewState(
       grid.tiles.filter(p => p.state == previewValid),
@@ -19,31 +22,34 @@ class UniversalGridPreview(private val element: Option[Element], private val gri
   val yLength: Int = grid.yLength
   val xLength: Int = grid.xLength
 
-  private var elementTileGroups: Map[Int, List[Tile]] = Map()
+  private val elementTileGroups: mutable.Map[Int, mutable.Map[Int, List[Tile]]] =
+    mutable.Map(element.indices.map(i => (i, mutable.Map[Int, List[Tile]]()))*)
 
-  private def getElementTileGroupAtPosition(xPos: Int, yPos: Int): List[Tile] = {
-    if (element.isEmpty) return List()
+  private def getElementTileMapAtPosition(xPos: Int, yPos: Int): immutable.Map[Int, List[Tile]] = {
+    if (element.isEmpty) return immutable.Map()
+    val result = mutable.Map[Int, List[Tile]]()
     val pos = xPos + yPos * grid.xLength
-    if (!elementTileGroups.contains(pos)) {
-      val elementTiles = grid.elementTiles(element.get, pos).getOrElse(List())
-      elementTileGroups += (pos -> elementTiles)
+    for(i <- element.indices) {
+      val elem = element(i)
+      if (!elementTileGroups(i).contains(pos)) {
+        val elementTiles = grid.elementTiles(elem, pos).getOrElse(List())
+        elementTileGroups(i)(pos) = elementTileGroups(i).getOrElse(pos, List()) ++ elementTiles
+      }
+      result += (i -> elementTileGroups(i)(pos))
     }
-    elementTileGroups(pos)
+    result.toMap
   }
 
-  def getValidTiles(xPos: Int, yPos: Int): List[Tile] = {
-    getElementTileGroupAtPosition(xPos, yPos).filter(_.state == empty)
+  def getValidTiles(xPos: Int, yPos: Int): immutable.Map[Int, List[Tile]] = {
+    getElementTileMapAtPosition(xPos, yPos)
+      .map( (i, tiles) => (i, tiles.filter(_.state != empty)) )
   }
 
-  def getInvalidTiles(xPos: Int, yPos: Int): List[Tile] = {
-    getElementTileGroupAtPosition(xPos, yPos).filter(_.state == blocked)
+  def getInvalidTiles(xPos: Int, yPos: Int): immutable.Map[Int, List[Tile]] = {
+    getElementTileMapAtPosition(xPos, yPos).map( (i, tiles) => (i, tiles.filter(_.state == blocked)) )
   }
 
   def getTile(xPos: Int, yPos: Int): Option[Tile] = {
     grid.tile(xPos, yPos)
-  }
-
-  def isElementSelected: Boolean = {
-    element.isDefined
   }
 }

@@ -1,6 +1,8 @@
 package controllers
 
+import model.GameData
 import play.api.*
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.*
 import services.GameStateService
 import util.*
@@ -13,14 +15,14 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
                                val htmlUtilities: HtmlUtilities,
                                val gameStateService: GameStateService) extends BaseController {
 
-  def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] => {
+  def getGame: Action[AnyContent] = Action { implicit request: Request[AnyContent] => {
     val (gameKey, gameState) = gameStateService.getInstance(getStateKeyCookie)
     
-    val universalGridPreview = gameState.getUniversalGridPreview
+    val universalGridPreview = gameState.getUniversalGridPreviewGenerator.getUniversalGridPreview
     val elements = gameState.getElements
-    val selectedElement = gameState.getSelectedElement
-    Ok(views.html.index(universalGridPreview, elements, htmlUtilities,
-      gameState.getColorIndex))
+    val gameData = GameData(elements, universalGridPreview, gameState.getScore,
+      gameState.getColorIndex)
+    Ok(Json.toJson(gameData))
       .withGameStateKeyCookie(gameKey)
   }
   }
@@ -28,7 +30,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
   def newGame(): Action[AnyContent] = Action { implicit
                                                request: Request[AnyContent] => {
     val (gameKey, gameState) = gameStateService.getInstance(None)
-    Redirect(routes.HomeController.index())
+    Redirect(routes.HomeController.getGame)
       .withGameStateKeyCookie(gameKey)
   }
   }

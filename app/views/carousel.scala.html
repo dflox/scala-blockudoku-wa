@@ -1,7 +1,7 @@
 @import blockudoku.models.{Element, Grid}
 @import util.HtmlUtilities
-@import services.UniversalGridPreview
-@(universalGridPreview: UniversalGridPreview, elements: List[Element], htmlUtil: HtmlUtilities, schemeIndex: Int)
+@import services.UniversalGridPreviewGenerator
+@(universalGridPreview: UniversalGridPreviewGenerator, elements: List[Element], htmlUtil: HtmlUtilities, schemeIndex: Int)
 
 <div id="colorCarousel" class="carousel slide position-relative carousel-fade" hx-swap-oob="true">
     <div class="carousel-inner" >

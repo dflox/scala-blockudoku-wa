@@ -50,27 +50,24 @@ class GameStateInstance extends Window {
       focusManager, this)
   }
   
-  def getUniversalGridPreview: UniversalGridPreview = {
+  def getUniversalGridPreviewGenerator: UniversalGridPreviewGenerator = {
     val selectedElement = elementCollector.getElements
     val grid = gridCollector.getGrid
-    UniversalGridPreview(selectedElement, grid)
+    UniversalGridPreviewGenerator(selectedElement, grid)
   }
 
   def getElements: List[blockudoku.models.Element] = {
     elementCollector.getElements
   }
-  
-  def getSelectedElement: Option[blockudoku.models.Element] = {
-    elementCollector.getSelectedElement
-  }
 
-  def selectElement(tileIndex: Int): Unit = {
-    val element = elementCollector.getElements(tileIndex)
+  private def selectElement(elementIndex: Int): Unit = {
+    val element = elementCollector.getElements(elementIndex)
     val command = commandFactory.createSelectElementCommand(element)
     commandInvoker.execute(command)
   }
 
-  def placeElement(tileIndex: Int): Unit = {
+  def placeElement(tileIndex: Int, elementIndex: Int): Unit = {
+    selectElement(elementIndex);
     val command = commandFactory.createSetElementCommand(
       elementCollector.getSelectedElement.get,
       tileIndex)
@@ -100,6 +97,10 @@ class GameStateInstance extends Window {
     } else {
       Failure(new IllegalArgumentException("Color index out of bounds"))
     }
+  }
+  
+  def getScore: Int = {
+    scoreCollector.getScore
   }
   
   override def display(): Unit = {

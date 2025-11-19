@@ -1,8 +1,8 @@
 @import blockudoku.models.{Element, Grid}
 @import util.HtmlUtilities
-@import services.UniversalGridPreview
+@import services.UniversalGridPreviewGenerator
 @(
-        universalGridPreview: UniversalGridPreview,
+        universalGridPreview: UniversalGridPreviewGenerator,
         elements: List[Element],
         htmlUtil: HtmlUtilities,
         schemeIndex: Int)

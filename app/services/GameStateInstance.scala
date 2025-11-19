@@ -2,6 +2,7 @@ package services
 
 import blockudoku.commands.{CommandFactory, CommandInvoker}
 import blockudoku.controllers.{ElementCollector, GridCollector}
+import blockudoku.models.Grid
 import blockudoku.registerComponents
 import blockudoku.services.GridPreviewBuilder
 import blockudoku.views.console.{ConsoleElementView, ConsoleGridView, ConsoleHeadlineView, ConsoleView}
@@ -101,6 +102,10 @@ class GameStateInstance extends Window {
   
   def getScore: Int = {
     scoreCollector.getScore
+  }
+  
+  def getGrid: Grid = {
+    gridCollector.getGrid
   }
   
   override def display(): Unit = {

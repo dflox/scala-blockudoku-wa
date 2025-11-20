@@ -22,7 +22,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
     val universalGridPreview = gameState.getUniversalGridPreviewGenerator.getUniversalGridPreview
     val elements = gameState.getElements
     val gameData = GameData(elements, universalGridPreview, grid, gameState.getScore,
-      gameState.getColorIndex)
+      gameState.getColorIndex, gameKey)
     Ok(Json.toJson(gameData))
       .withGameStateKeyCookie(gameKey)
   }

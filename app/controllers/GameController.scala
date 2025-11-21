@@ -14,7 +14,7 @@ import javax.inject.*
 
 @Singleton
 class GameController @Inject()(val controllerComponents: ControllerComponents,
-                               val gameStateService: GameStateService) extends BaseController {
+                               val gameStateService: GameStateService, val socketService: SocketService) extends BaseController {
 
   def placeElement: Action[JsValue] = Action.async(parse.json) { implicit request => {
     request.body.validate[ElementPlacement].fold(
@@ -23,7 +23,7 @@ class GameController @Inject()(val controllerComponents: ControllerComponents,
       },
       elementPlacement => {
         val (gameKey, gameState) = gameStateService.getInstance(getStateKeyCookie)
-        Future.successful(handlePlaceElement(elementPlacement, gameKey, gameState))
+        Future.successful(handlePlaceElement(elementPlacement, gameKey, gameState, socketService))
       }
     )
   }
@@ -31,9 +31,15 @@ class GameController @Inject()(val controllerComponents: ControllerComponents,
 
   private def handlePlaceElement(elementPlacement: ElementPlacement,
                                  gameKey: String, 
-                                 gameState: GameStateInstance)
+                                 gameState: GameStateInstance,
+                                 socketService: SocketService
+                                )
   : Result = {
     gameState.placeElement(elementPlacement.positionIndex, elementPlacement.elementIndex)
+    val gameData = GameDataBuilder.build(gameKey, gameState)
+
+    socketService.gameStateUpdate(gameKey, gameData)
+
     Ok(Json.toJson(gameState.getUniversalGridPreviewGenerator.getUniversalGridPreview)).withGameStateKeyCookie(gameKey)
   }
 }

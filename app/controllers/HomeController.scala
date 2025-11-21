@@ -18,11 +18,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
   def getGame: Action[AnyContent] = Action { implicit request: Request[AnyContent] => {
     val (gameKey, gameState) = gameStateService.getInstance(getStateKeyCookie)
     
-    val grid = gameState.getGrid
-    val universalGridPreview = gameState.getUniversalGridPreviewGenerator.getUniversalGridPreview
-    val elements = gameState.getElements
-    val gameData = GameData(elements, universalGridPreview, grid, gameState.getScore,
-      gameState.getColorIndex, gameKey)
+    val gameData = GameDataBuilder.build(gameKey, gameState)
     Ok(Json.toJson(gameData))
       .withGameStateKeyCookie(gameKey)
   }

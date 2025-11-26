@@ -4,7 +4,7 @@ import blockudoku.commands.{CommandFactory, CommandInvoker}
 import blockudoku.controllers.{ElementCollector, GridCollector}
 import blockudoku.models.Grid
 import blockudoku.registerComponents
-import blockudoku.services.GridPreviewBuilder
+import blockudoku.services.{Event, GridPreviewBuilder}
 import blockudoku.views.console.{ConsoleElementView, ConsoleGridView, ConsoleHeadlineView, ConsoleView}
 import blockudoku.windows.{FocusManager, Window}
 import io.gitlab.freeeezee.yadis.ComponentContainer
@@ -26,6 +26,8 @@ class GameStateInstance extends Window {
   private val consoleViews = initializeViews()
 
   private var colorIndex = scala.util.Random.nextInt(4)
+
+  val onPlace: Event = Event()
   
   private def initializeViews(): List[ConsoleView] = {
     var views: List[ConsoleView] = List()
@@ -73,6 +75,8 @@ class GameStateInstance extends Window {
       elementCollector.getSelectedElement.get,
       tileIndex)
     commandInvoker.execute(command)
+    
+    onPlace.invoke()
   }
   
   def toJson: String = {

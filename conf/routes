@@ -12,3 +12,5 @@ POST        /update/color/:ind              controllers.HomeController.setColor(
 
 POST        /upload                         controllers.FileController.uploadGame
 GET         /download                       controllers.FileController.downloadGame
+
+GET         /socket                         controllers.HomeController.socket

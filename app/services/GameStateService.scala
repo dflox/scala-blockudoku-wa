@@ -9,7 +9,8 @@ class GameStateService {
   private val instances: mutable.Map[String, GameStateInstance] = mutable.Map()
 
   private def newKey: String = {
-    UUID.randomUUID().toString
+    //UUID.randomUUID().toString
+    "0"
   }
 
   private def newInstance: (String, GameStateInstance) = {
@@ -27,11 +28,9 @@ class GameStateService {
   }
 
   def getInstance(keyOption: Option[String]): (String, GameStateInstance) = {
-    keyOption match {
-      case Some(key) =>
-        if instances.contains(key) then (key, instances(key))
-        else newInstance
-      case None => newInstance
-    }
+    val key = "0"
+
+    if instances.contains(key) then (key, instances(key))
+    else newInstance
   }
 }

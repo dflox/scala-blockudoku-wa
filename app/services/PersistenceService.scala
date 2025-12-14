@@ -21,11 +21,11 @@ class PersistenceService {
     file
   }
 
-  def loadGameState(gameFile: File): Option[GameStateInstance] = {
+  def loadGameState(gameFile: File, sessionKey: String): Option[GameStateInstance] = {
     if (gameFile.exists()) {
       val source = scala.io.Source.fromFile(gameFile)
       val jsonString = try source.mkString finally source.close()
-      Some(GameStateInstance.fromJson(jsonString))
+      Some(GameStateInstance.fromJson(jsonString, sessionKey))
     } else {
       None
     }

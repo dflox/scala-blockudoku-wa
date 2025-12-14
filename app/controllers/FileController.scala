@@ -17,12 +17,17 @@ class FileController @Inject()(val controllerComponents: ControllerComponents,
     { request =>
       request.body.file("gameFile").map { upload =>
         val gameFile = upload.ref.path.toFile
-
-        val gameState = persistenceService.loadGameState(gameFile)
+        val keyOption = getStateKeyCookie(request)
+        val gameKey = keyOption.getOrElse("")
+        
+        if(keyOption.isEmpty) {
+          val (gameKey, gameStateTemp) = gameStateService.getInstance(keyOption)
+        }
+        val gameState = persistenceService.loadGameState(gameFile, gameKey)
 
         gameState match {
           case Some(state) =>
-            val gameKey = gameStateService.setInstance(getStateKeyCookie(request), state)
+            gameStateService.setInstance(Some(gameKey), state)
             Redirect(routes.HomeController.getGame)
               .flashing("success" -> "true")
               .withGameStateKeyCookie(gameKey)

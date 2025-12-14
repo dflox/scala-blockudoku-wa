@@ -2,19 +2,20 @@ package services
 
 import java.util.UUID
 import javax.inject.*
-import scala.collection.mutable
+import scala.collection.concurrent.TrieMap
+import scala.concurrent.duration.FiniteDuration
 
 @Singleton
 class GameStateService {
-  private val instances: mutable.Map[String, GameStateInstance] = mutable.Map()
+  private val instances: TrieMap[String, GameStateInstance] = TrieMap.empty
 
   private def newKey: String = {
     UUID.randomUUID().toString
   }
 
   private def newInstance: (String, GameStateInstance) = {
-    val instance = GameStateInstance()
     val key = newKey
+    val instance = GameStateInstance(key)
     instances(key) = instance
 
     (key, instance)
@@ -33,5 +34,17 @@ class GameStateService {
         else newInstance
       case None => newInstance
     }
+  }
+  
+  def removeInstance(key: String): Unit = {
+    instances.remove(key)
+  }
+  
+  def cleanUpOldInstances(maxAge: FiniteDuration): Unit = {
+    val now = System.currentTimeMillis()
+    val keysToRemove = instances.collect {
+      case (key, instance) if (now - instance.getLastTimeUsed) > maxAge.toMillis => key
+    }
+    keysToRemove.foreach(instances.remove)
   }
 }

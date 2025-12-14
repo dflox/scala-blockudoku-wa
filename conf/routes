@@ -1,14 +1,16 @@
 GET         /                               controllers.HomeController.getGame
 
 GET         /join-session/:sessionId        controllers.SessionController.joinSession(sessionId: String)
+GET         /new-session                     controllers.SessionController.newSession
 
 POST        /place                          controllers.GameController.placeElement
 GET         /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
 
-POST        /new                            controllers.HomeController.newGame()
+GET         /reset                            controllers.HomeController.newGame()
 POST        /update/color/next              controllers.HomeController.nextColor()
 POST        /update/color/prev              controllers.HomeController.prevColor()
 POST        /update/color/:ind              controllers.HomeController.setColor(ind: Int)
+POST        /update/num-elements/:num          controllers.HomeController.setNumElements(num: Int)
 
 POST        /upload                         controllers.FileController.uploadGame
 GET         /download                       controllers.FileController.downloadGame

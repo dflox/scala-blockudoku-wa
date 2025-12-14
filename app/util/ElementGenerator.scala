@@ -4,25 +4,25 @@ import blockudoku.models.{Element, Point}
 import blockudoku.views.gui.ColorScheme
 
 object ElementGenerator {
-  private val maxElementLength: Int = 3
 
-  def generateElement(slot: Int): Element = {
+  def generateElement(slot: Int, pcg32: PCG32Random, 
+                      probabilityList: ProbabilityList[Int]): Element = {
     var points = List[Point](Point(0, 0))
-    val length = scala.util.Random.between(1, maxElementLength)
-    val randomColor = scala.util.Random.nextInt(ColorScheme.current.length)
+    val length = probabilityList.getRandomItem(pcg32.nextFloat())
+    val randomColor = pcg32.nextInt(ColorScheme.current.length)
 
     for i <- 0 until length do
-      points = generateNextPoint(points) :: points
+      points = generateNextPoint(points, pcg32) :: points
 
     Element(points, slot, randomColor)
   }
-
-  private def generateNextPoint(points: List[Point]): Point = {
+  
+  private def generateNextPoint(points: List[Point], pcg32: PCG32Random): Point = {
     val possiblePoints = (0 to 7).toList
       .map(num => pointFromDirection(points.last, num))
       .filter(point => !points.contains(point))
 
-    possiblePoints(scala.util.Random.nextInt(possiblePoints.length))
+    possiblePoints(pcg32.nextInt(possiblePoints.length))
   }
 
   private def pointFromDirection(point: Point, direction: Int): Point = {

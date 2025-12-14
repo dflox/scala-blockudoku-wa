@@ -4,7 +4,7 @@ import model.GameData
 import play.api.*
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.*
-import services.GameStateService
+import services.{GameStateInstance, GameStateService}
 import util.*
 
 import javax.inject.*
@@ -12,7 +12,6 @@ import scala.util.{Failure, Success}
 
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents,
-                               val htmlUtilities: HtmlUtilities,
                                val gameStateService: GameStateService) extends BaseController {
 
   def getGame: Action[AnyContent] = Action { implicit request: Request[AnyContent] => {
@@ -26,7 +25,8 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
 
   def newGame(): Action[AnyContent] = Action { implicit
                                                request: Request[AnyContent] => {
-    val (gameKey, gameState) = gameStateService.getInstance(None)
+    val (gameKey, gameState) = gameStateService.getInstance(getStateKeyCookie)
+    gameStateService.setInstance(Some(gameKey), GameStateInstance(gameKey))
     Redirect(routes.HomeController.getGame)
       .withGameStateKeyCookie(gameKey)
   }
@@ -59,6 +59,19 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
           .withGameStateKeyCookie(gameKey)
       case Failure(_) =>
         BadRequest("Invalid color index")
+    }
+  }
+  }
+
+  def setNumElements(num: Int): Action[AnyContent] = Action { implicit
+                                                   request: Request[AnyContent] => {
+    val (gameKey, gameState) = gameStateService.getInstance(getStateKeyCookie)
+    gameState.setNumElements(num) match {
+      case Success(_) =>
+        Ok("")
+          .withGameStateKeyCookie(gameKey)
+      case Failure(_) =>
+        BadRequest("Invalid number of elements")
     }
   }
   }

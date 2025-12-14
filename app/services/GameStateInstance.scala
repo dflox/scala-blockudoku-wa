@@ -1,57 +1,37 @@
 package services
 
 import blockudoku.commands.{CommandFactory, CommandInvoker}
-import blockudoku.controllers.{ElementCollector, GridCollector}
+import blockudoku.controllers.GridCollector
 import blockudoku.models.Grid
-import blockudoku.registerComponents
 import blockudoku.services.GridPreviewBuilder
-import blockudoku.views.console.{ConsoleElementView, ConsoleGridView, ConsoleHeadlineView, ConsoleView}
 import blockudoku.windows.{FocusManager, Window}
 import io.gitlab.freeeezee.yadis.ComponentContainer
+import util.registerComponents
 
 import scala.util.{Failure, Success, Try}
 
-class GameStateInstance extends Window {
+class GameStateInstance(sessionKey: String) extends Window {
   private val container = ComponentContainer().registerComponents().buildProvider()
 
+  private val sessionKeyStore = container.get[SessionKeyStore].setSessionKey(sessionKey)
   private val commandFactory = container.get[CommandFactory]
   private val commandInvoker = container.get[CommandInvoker]
   private val gridCollector = container.get[GridCollector]
-  private val elementCollector = container.get[ElementCollector]
+  private val elementCollector = container.get[AdvancedElementManager]
   private val focusManager = container.get[FocusManager]
   private val previewBuilder = container.get[GridPreviewBuilder]
   private val scoreCollector = container.get[blockudoku.controllers.ScoreCollector]
   private val serializer = container.get[blockudoku.saving.Serializer]
-
-  private val consoleViews = initializeViews()
+  private var lastTimeUsed: Long = System.currentTimeMillis()
 
   private var colorIndex = scala.util.Random.nextInt(4)
-  
-  private def initializeViews(): List[ConsoleView] = {
-    var views: List[ConsoleView] = List()
 
-    views = views :+ initializeHeadlineView()
-    views = views :+ initializeGridView()
-    views = views :+ initializeElementView()
-    views
-  }
-
-  private def initializeHeadlineView(): ConsoleView = {
-    val width = gridCollector.getGrid.xLength * 5 + 1
-    ConsoleHeadlineView(width, focusManager, this)
-  }
-
-  private def initializeGridView(): ConsoleView = {
-    ConsoleGridView(commandFactory, commandInvoker, gridCollector, elementCollector, focusManager,
-      this, previewBuilder)
-  }
-
-  private def initializeElementView(): ConsoleView = {
-    ConsoleElementView(commandFactory, commandInvoker, elementCollector, gridCollector,
-      focusManager, this)
+  def getLastTimeUsed: Long = {
+    lastTimeUsed
   }
   
   def getUniversalGridPreviewGenerator: UniversalGridPreviewGenerator = {
+    updateLastUsedTime()
     val selectedElement = elementCollector.getElements
     val grid = gridCollector.getGrid
     UniversalGridPreviewGenerator(selectedElement, grid)
@@ -62,12 +42,13 @@ class GameStateInstance extends Window {
   }
 
   private def selectElement(elementIndex: Int): Unit = {
-    val element = elementCollector.getElements(elementIndex)
+    val element = elementCollector.elements(elementIndex)
     val command = commandFactory.createSelectElementCommand(element)
     commandInvoker.execute(command)
   }
 
   def placeElement(tileIndex: Int, elementIndex: Int): Unit = {
+    updateLastUsedTime()
     selectElement(elementIndex);
     val command = commandFactory.createSetElementCommand(
       elementCollector.getSelectedElement.get,
@@ -76,6 +57,7 @@ class GameStateInstance extends Window {
   }
   
   def toJson: String = {
+    updateLastUsedTime()
     serializer.serialize()
   }
   
@@ -84,19 +66,32 @@ class GameStateInstance extends Window {
   }
 
   def nextColorScheme() : Unit = {
+    updateLastUsedTime()
     colorIndex = (colorIndex + 1) % 4
   }
   
   def prevColorScheme() : Unit = {
+    updateLastUsedTime()
     colorIndex = (colorIndex - 1 + 4) % 4
   }
 
   def setColorScheme(ind: Int): Try[Unit] = {
+    updateLastUsedTime()
     if (ind >=0 && ind < 4) {
       colorIndex = ind
       Success(())
     } else {
       Failure(new IllegalArgumentException("Color index out of bounds"))
+    }
+  }
+
+  def setNumElements(num: Int): Try[Unit] = {
+    updateLastUsedTime()
+    if (num >= 1 && num <= 9) {
+      elementCollector.currentElementCountVar = num
+      Success(())
+    } else {
+      Failure(new IllegalArgumentException("Number of elements out of bounds"))
     }
   }
   
@@ -115,11 +110,15 @@ class GameStateInstance extends Window {
   override def setUpdated(): Unit = {
 
   }
+
+  private def updateLastUsedTime(): Unit = {
+    lastTimeUsed = System.currentTimeMillis()
+  }
 }
 
 object GameStateInstance {
-  def fromJson(data: String): GameStateInstance = {
-    val instance = new GameStateInstance()
+  def fromJson(data: String, sessionKey: String): GameStateInstance = {
+    val instance = new GameStateInstance(sessionKey)
     instance.serializer.deserialize(data)
     instance
   }

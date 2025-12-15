@@ -10,7 +10,6 @@ GET         /reset                            controllers.HomeController.newGame
 POST        /update/color/next              controllers.HomeController.nextColor()
 POST        /update/color/prev              controllers.HomeController.prevColor()
 POST        /update/color/:ind              controllers.HomeController.setColor(ind: Int)
-POST        /update/num-elements/:num          controllers.HomeController.setNumElements(num: Int)
 
 POST        /upload                         controllers.FileController.uploadGame
 GET         /download                       controllers.FileController.downloadGame

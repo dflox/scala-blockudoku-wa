@@ -62,17 +62,4 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents,
     }
   }
   }
-
-  def setNumElements(num: Int): Action[AnyContent] = Action { implicit
-                                                   request: Request[AnyContent] => {
-    val (gameKey, gameState) = gameStateService.getInstance(getStateKeyCookie)
-    gameState.setNumElements(num) match {
-      case Success(_) =>
-        Ok("")
-          .withGameStateKeyCookie(gameKey)
-      case Failure(_) =>
-        BadRequest("Invalid number of elements")
-    }
-  }
-  }
 }

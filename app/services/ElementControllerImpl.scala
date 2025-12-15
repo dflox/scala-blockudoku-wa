@@ -7,8 +7,6 @@ import util.ElementGenerator.generateElement
 import util.{PCG32Random, ProbabilityList, SeedGenerator}
 
 trait AdvancedElementManager extends ElementController {
-
-  var currentElementCountVar: Int = 3
   val maxElementCount: Int = 9
 
   var probabilityList: ProbabilityList[Int] = ProbabilityList[Int](List((1, 0.15f), (2, 0.35f),
@@ -18,7 +16,7 @@ trait AdvancedElementManager extends ElementController {
    * Regenerates all [[Element]]s.
    */
   def regenerateAll(): Unit = {
-    for slot <- 0 until currentElementCountVar do {
+    for slot <- 0 until maxElementCount do {
       regenerate(slot)
     }
   }
@@ -74,7 +72,7 @@ class ElementControllerImpl(sessionKeyStore: SessionKeyStore, gridController: Gr
   })
 
   override def getElements: List[Element] = {
-    elements.take(currentElementCountVar)
+    elements.take(maxElementCount)
   }
 
   private def updatePCG32(): Unit = {

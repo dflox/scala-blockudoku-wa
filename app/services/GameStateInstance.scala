@@ -84,16 +84,6 @@ class GameStateInstance(sessionKey: String) extends Window {
       Failure(new IllegalArgumentException("Color index out of bounds"))
     }
   }
-
-  def setNumElements(num: Int): Try[Unit] = {
-    updateLastUsedTime()
-    if (num >= 1 && num <= 9) {
-      elementCollector.currentElementCountVar = num
-      Success(())
-    } else {
-      Failure(new IllegalArgumentException("Number of elements out of bounds"))
-    }
-  }
   
   def getScore: Int = {
     scoreCollector.getScore

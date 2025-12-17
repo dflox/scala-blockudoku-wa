@@ -11,7 +11,8 @@ case class GameData(elements: List[Element],
                     grid: Grid,
                     score: Int,
                     colorIndex: Int,
-                    sessionId: String
+                    sessionId: String,
+                    placementHistory: List[PlacementHistory]
                    )
 
 case object GameData {
@@ -22,7 +23,8 @@ case object GameData {
       "universalGridPreview" -> Json.toJson(gd.universalGridPreview),
       "score" -> gd.score,
       "colorIndex" -> gd.colorIndex,
-      "sessionId" -> gd.sessionId
+      "sessionId" -> gd.sessionId,
+      "placementHistory" -> Json.toJson(gd.placementHistory)
     )
   }
   implicit val gameDataReads: Reads[GameData] = Reads { json =>
@@ -33,6 +35,7 @@ case object GameData {
       score <- (json \ "score").validate[Int]
       colorIndex <- (json \ "colorIndex").validate[Int]
       sessionId <- (json \ "sessionId").validate[String]
-    } yield GameData(elements, universalGridPreview, grid, score, colorIndex, sessionId)
+      placementHistory <- (json \ "placementHistory").validate[List[PlacementHistory]]
+    } yield GameData(elements, universalGridPreview, grid, score, colorIndex, sessionId, placementHistory)
   }
 } 

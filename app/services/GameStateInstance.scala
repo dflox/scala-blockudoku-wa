@@ -6,9 +6,11 @@ import blockudoku.models.Grid
 import blockudoku.services.GridPreviewBuilder
 import blockudoku.windows.{FocusManager, Window}
 import io.gitlab.freeeezee.yadis.ComponentContainer
+import model.PlacementHistory
 import util.registerComponents
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success, Try, boundary}
+import scala.util.boundary.break
 
 class GameStateInstance(sessionKey: String) extends Window {
   private val container = ComponentContainer().registerComponents().buildProvider()
@@ -23,6 +25,7 @@ class GameStateInstance(sessionKey: String) extends Window {
   private val scoreCollector = container.get[blockudoku.controllers.ScoreCollector]
   private val serializer = container.get[blockudoku.saving.Serializer]
   private var lastTimeUsed: Long = System.currentTimeMillis()
+  private var placementHistory: List[PlacementHistory] = List()
 
   private var colorIndex = scala.util.Random.nextInt(4)
 
@@ -47,8 +50,42 @@ class GameStateInstance(sessionKey: String) extends Window {
     commandInvoker.execute(command)
   }
 
-  def placeElement(tileIndex: Int, elementIndex: Int): Unit = {
+  def getPlacementHistory: List[PlacementHistory] = {
+    placementHistory
+  }
+
+  def updatePlacementHistory(placementHistories: List[PlacementHistory]): Unit = {
     updateLastUsedTime()
+
+    if(verifyPlacementHistory(placementHistories)) {
+      for (i <- this.placementHistory.length until placementHistories.length) {
+        val ph = placementHistories(i)
+        placeElement(ph.tileIndex, ph.elementIndex)
+      }
+      this.placementHistory = placementHistories
+    }
+  }
+
+  private def verifyPlacementHistory(placementHistories: List[PlacementHistory]): Boolean = {
+    boundary:
+      if (placementHistories.isEmpty) break(false)
+      if (placementHistories.length <= this.placementHistory.length) break(false)
+
+      for(i <- this.placementHistory.indices) {
+        if(placementHistories(i) != this.placementHistory(i)) {
+          break(false)
+        }
+      }
+
+      for(i <- placementHistories.indices.drop(1)) {
+        if(placementHistories(i).placementIndex != placementHistories(i - 1).placementIndex + 1) {
+          break(false)
+        }
+      }
+      true
+  }
+
+  private def placeElement(tileIndex: Int, elementIndex: Int): Unit = {
     selectElement(elementIndex);
     val command = commandFactory.createSetElementCommand(
       elementCollector.getSelectedElement.get,

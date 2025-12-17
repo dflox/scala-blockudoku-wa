@@ -8,8 +8,9 @@ object GameDataBuilder {
     val grid = gameState.getGrid
     val universalGridPreview = gameState.getUniversalGridPreviewGenerator.getUniversalGridPreview
     val elements = gameState.getElements
+    val placementHistory = gameState.getPlacementHistory
     
     GameData(elements, universalGridPreview, grid, gameState.getScore,
-      gameState.getColorIndex, sessionId)
+      gameState.getColorIndex, sessionId, placementHistory)
   }
 }

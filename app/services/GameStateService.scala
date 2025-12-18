@@ -13,8 +13,7 @@ class GameStateService {
     UUID.randomUUID().toString
   }
 
-  private def newInstance: (String, GameStateInstance) = {
-    val key = newKey
+  private def newInstance(key: String): (String, GameStateInstance) = {
     val instance = GameStateInstance(key)
     instances(key) = instance
 
@@ -31,8 +30,8 @@ class GameStateService {
     keyOption match {
       case Some(key) =>
         if instances.contains(key) then (key, instances(key))
-        else newInstance
-      case None => newInstance
+        else newInstance(key)
+      case None => newInstance(newKey)
     }
   }
   

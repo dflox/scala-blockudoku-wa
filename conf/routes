@@ -23,3 +23,5 @@ GET         /login-success                  controllers.UserController.callbackR
 GET         /highscore                      controllers.HomeController.getHighScore()
 
 POST        /register                      controllers.UserController.registerUser()
+
+GET         /profile                        controllers.UserController.getUserInfo()

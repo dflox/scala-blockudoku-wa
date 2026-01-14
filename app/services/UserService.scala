@@ -9,14 +9,13 @@ import scala.collection.concurrent.TrieMap
 @Singleton
 class UserService @Inject(){
   private val users = TrieMap[String, SimpleUser](
-    "admin" -> SimpleUser("admin", "password123"),
-    "user" -> SimpleUser("user", "1234")
+    "flo" -> SimpleUser("flo", "flo"),
   )
-  
+
   def addUser(username: String, password: String): Unit = {
     users.put(username, SimpleUser(username, password))
   }
-  
+
   def addUser(simpleUser: SimpleUser) : Unit = {
     users.put(simpleUser.username, simpleUser)
   }

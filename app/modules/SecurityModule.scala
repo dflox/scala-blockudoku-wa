@@ -33,7 +33,6 @@ class SecurityModule(environment: Environment, configuration: Configuration)
     bind(classOf[SessionStore]).toInstance(playSessionStore)
     bind(classOf[SecurityComponents]).to(classOf[DefaultSecurityComponents])
 
-    // Explicitly bind the controllers pac4j provides
     bind(classOf[CallbackController]).asEagerSingleton()
     bind(classOf[LogoutController]).asEagerSingleton()
     bind(classOf[JwtGenerator]).toInstance(provideJwtGenerator())
@@ -81,6 +80,7 @@ class SecurityModule(environment: Environment, configuration: Configuration)
     val githubClient = new GitHubClient(githubClientId, githubSecret)
 
     val formClient = new FormClient(clientUrl, basicAuthenticator)
+    formClient.setName("FormClient")
 
     // 2. Direct Clients (Non-interactive/API-based)
     val signatureConfig = new SecretSignatureConfiguration(jwtSecret)
@@ -96,6 +96,7 @@ class SecurityModule(environment: Environment, configuration: Configuration)
       "http://"+ apiUrl +"/callback",
       googleClient,
       githubClient,
+      formClient,
       jwtClient
     )
 

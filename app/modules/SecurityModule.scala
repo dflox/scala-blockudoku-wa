@@ -93,7 +93,7 @@ class SecurityModule(environment: Environment, configuration: Configuration)
     // 3. Group them in the Config
     // The first argument is the default callback URL
     val config = new Config(
-      "http://"+ apiUrl +"/callback",
+      apiUrl +"/callback",
       googleClient,
       githubClient,
       formClient,

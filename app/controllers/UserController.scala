@@ -57,6 +57,18 @@ class UserController @Inject()(
         Unauthorized("No profile found")
     }
   }
+
+  def authGoogle: Action[AnyContent] = Secure("Google2Client") { implicit request =>
+    val profile = request.profiles.head
+    val jwt = jwtGenerator.generate(profile)
+    Redirect(clientUrl).withJwtCookie(jwt)
+  }
+
+  def authGitHub: Action[AnyContent] = Secure("GitHubClient") { implicit request =>
+    val profile = request.profiles.head
+    val jwt = jwtGenerator.generate(profile)
+    Redirect(clientUrl).withJwtCookie(jwt)
+  }
 }
 
 //  def basicAuth: Action[AnyContent] = Secure("BasicAuthClient") { implicit request =>

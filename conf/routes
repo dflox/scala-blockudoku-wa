@@ -22,6 +22,9 @@ GET         /logout                         @org.pac4j.play.LogoutController.log
 GET         /login-success                  controllers.UserController.callbackRedirect
 GET         /highscore                      controllers.HomeController.getHighScore()
 
-POST        /register                      controllers.UserController.registerUser()
+POST        /register                       controllers.UserController.registerUser()
 
 GET         /profile                        controllers.UserController.getUserInfo()
+
+GET         /auth/google                    controllers.UserController.authGoogle
+GET         /auth/github                    controllers.UserController.authGitHub

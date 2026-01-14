@@ -16,6 +16,10 @@ class UserService @Inject(){
   def addUser(username: String, password: String): Unit = {
     users.put(username, SimpleUser(username, password))
   }
+  
+  def addUser(simpleUser: SimpleUser) : Unit = {
+    users.put(simpleUser.username, simpleUser)
+  }
 
   def findByUsername(username: String): Option[SimpleUser] = users.get(username)
 }

@@ -1,13 +1,15 @@
 package controllers
 
+import model.SimpleUser
 import org.pac4j.jwt.profile.JwtGenerator
 import org.pac4j.play.scala.{Security, SecurityComponents}
-import play.api.mvc.{Action, AnyContent, Request}
+import play.api.mvc.{Action, AnyContent, Request, Result}
 
 import javax.inject.{Inject, Singleton}
 import services.{HighScoreService, UserService}
 import util.*
 import play.api.Configuration
+import play.api.libs.json.JsValue
 
 @Singleton
 class UserController @Inject()(
@@ -26,26 +28,26 @@ class UserController @Inject()(
     Redirect(clientUrl).withJwtCookie(jwt)
   }
 
-  def registerUser: Action[AnyContent] = Action { implicit request =>
-    val maybeUser = for {
-      username <- request.body.asFormUrlEncoded.flatMap(_.get("username").flatMap(_.headOption))
-      password <- request.body.asFormUrlEncoded.flatMap(_.get("password").flatMap(_.headOption))
-    } yield (username, password)
-    maybeUser match {
-      case Some((username, password)) =>
-        userService.findByUsername(username) match {
-          case Some(_) =>
-            Conflict("User already exists")
-          case None =>
-            userService.addUser(username, password)
-            Created("User registered successfully")
-        }
+  def registerUser: Action[JsValue] = Action.async(parse.json) { implicit request =>
+    request.body.validate[SimpleUser].fold(
+      error => {
+        scala.concurrent.Future.successful(BadRequest("Invalid data. " + error.toString))
+      },
+      userData => {
+        scala.concurrent.Future.successful(handleUserRegistration(userData))
+      }
+    )
+  }
+  
+  private def handleUserRegistration(userData: SimpleUser): Result = {
+    userService.findByUsername(userData.username) match {
+      case Some(userId) =>
+        Conflict("User already exists.")
       case None =>
-        BadRequest("Missing username or password")
+        userService.addUser(userData)
+        Created("User registered successfully.")
     }
   }
-
-
 }
 
 //  def basicAuth: Action[AnyContent] = Secure("BasicAuthClient") { implicit request =>

@@ -38,7 +38,7 @@ class SecurityModule(environment: Environment, configuration: Configuration)
     bind(classOf[LogoutController]).asEagerSingleton()
     bind(classOf[JwtGenerator]).toInstance(provideJwtGenerator())
   }
-  
+
   private def provideJwtGenerator(): JwtGenerator = {
     val jwtSecret = configuration.get[String]("jwt.secret")
     val signatureConfig =
@@ -65,52 +65,22 @@ class SecurityModule(environment: Environment, configuration: Configuration)
             }
           }
         }
-  
+
   @Provides
   def provideConfig(basicAuthenticator: Authenticator, sessionStore: SessionStore): Config = {
-
-    // 1. Define the Authenticator (Validate username/password)
-    //    val basicAuthenticator = new Authenticator {
-    //      override def validate(ctx: CallContext, credentials: Credentials)
-    //      : Optional[Credentials] = {
-    //        val upc = credentials.asInstanceOf[UsernamePasswordCredentials]
-    //        // Blocking here is necessary as pac4j validate is synchronous, but your DB is async.
-    //        // In real apps, use a dedicated execution context or synchronous DB driver if
-    //        strictly needed.
-    //        val userOpt = userService.findByUsername(upc.getUsername)
-    //
-    //        userOpt match {
-    //          case Some(user) if user.password == upc.getPassword =>
-    //            val profile = new CommonProfile()
-    //            profile.setId(user.username)
-    //            profile.addAttribute("username", user.username)
-    //            upc.setUserProfile(profile)
-    //            Optional.of(upc)
-    //          case _ =>
-    //            throw new org.pac4j.core.exception.CredentialsException("Invalid credentials")
-    //        }
-    //      }
-    //    }
-
-    // 2. Define the Client (DirectBasicAuthClient checks the 'Authorization: Basic ...' header)
-    //    val basicAuthClient = new DirectBasicAuthClient(basicAuthenticator)
-    //    basicAuthClient.setName("BasicAuthClient")
-
-    // 3. Register Clients (You can add Google/GitHub clients here later)
-
     val jwtSecret = configuration.get[String]("jwt.secret")
     val googleClientId = configuration.get[String]("google.clientId")
     val googleSecret = configuration.get[String]("google.secret")
     val githubClientId = configuration.get[String]("github.clientId")
     val githubSecret = configuration.get[String]("github.secret")
     val apiUrl = configuration.get[String]("api.url")
+    val clientUrl = configuration.get[String]("client.url")
 
     // 1. Indirect Clients (Interactive/Browser-based)
     val googleClient = new Google2Client(googleClientId, googleSecret)
     val githubClient = new GitHubClient(githubClientId, githubSecret)
 
-    
-    val formClient = new FormClient("/login", basicAuthenticator)
+    val formClient = new FormClient(clientUrl, basicAuthenticator)
 
     // 2. Direct Clients (Non-interactive/API-based)
     val signatureConfig = new SecretSignatureConfiguration(jwtSecret)
@@ -118,8 +88,8 @@ class SecurityModule(environment: Environment, configuration: Configuration)
     jwtAuthenticator.addSignatureConfiguration(signatureConfig)
 
     val jwtClient = new CookieClient(TOKEN_KEY, jwtAuthenticator)
-    
-    
+    jwtClient.setName("CookieClient")
+
     // 3. Group them in the Config
     // The first argument is the default callback URL
     val config = new Config(

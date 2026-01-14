@@ -1,29 +1,27 @@
 package modules
 
-import org.pac4j.core.profile.CommonProfile
-import org.pac4j.core.credentials.UsernamePasswordCredentials
-import org.pac4j.core.credentials.Credentials
-import java.util.Optional
-import org.pac4j.core.context.CallContext
 import com.google.inject.{AbstractModule, Provides}
+import controllers.TOKEN_KEY
 import org.pac4j.core.config.Config
-import org.pac4j.core.context.FrameworkParameters
+import org.pac4j.core.context.{CallContext, FrameworkParameters}
 import org.pac4j.core.context.session.{SessionStore, SessionStoreFactory}
-import org.pac4j.http.client.direct.{CookieClient, ParameterClient}
+import org.pac4j.core.credentials.{Credentials, UsernamePasswordCredentials}
+import org.pac4j.core.credentials.authenticator.Authenticator
+import org.pac4j.core.profile.CommonProfile
+import org.pac4j.http.client.direct.CookieClient
 import org.pac4j.http.client.indirect.FormClient
-import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration
 import org.pac4j.jwt.credentials.authenticator.JwtAuthenticator
 import org.pac4j.jwt.profile.JwtGenerator
 import org.pac4j.oauth.client.{GitHubClient, Google2Client}
-import org.pac4j.play.{CallbackController, LogoutController}
 import org.pac4j.play.scala.{DefaultSecurityComponents, SecurityComponents}
 import org.pac4j.play.store.{PlayCookieSessionStore, ShiroAesDataEncrypter}
+import org.pac4j.play.{CallbackController, LogoutController}
 import play.api.{Configuration, Environment}
 import services.UserService
-import controllers.TOKEN_KEY
+
 import java.nio.charset.StandardCharsets
-import org.pac4j.core.credentials.authenticator.Authenticator
+import java.util.Optional
 
 class SecurityModule(environment: Environment, configuration: Configuration)
   extends AbstractModule {

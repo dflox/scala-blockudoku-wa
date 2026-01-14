@@ -18,7 +18,7 @@ class HomeController @Inject()(val controllerComponents: SecurityComponents,
                                val highScoreService: HighScoreService) extends
                                                                         Security[CommonProfile] {
 
-  def getHighScore: Action[AnyContent] = Secure("CookieClient,Google2Client,GitHubClient") { implicit request =>
+  def getHighScore: Action[AnyContent] = Secure("CookieClient") { implicit request =>
     profiles.headOption match {
       case Some(user) =>
         val highScore = highScoreService.getHighScore(user.getId)

@@ -1,15 +1,15 @@
 package controllers
 
-import model.SimpleUser
+import model.{SimpleUser, UserInfo}
 import org.pac4j.jwt.profile.JwtGenerator
 import org.pac4j.play.scala.{Security, SecurityComponents}
-import play.api.mvc.{Action, AnyContent, Request, Result}
-
-import javax.inject.{Inject, Singleton}
+import play.api.Configuration
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Action, AnyContent, Result}
 import services.{HighScoreService, UserService}
 import util.*
-import play.api.Configuration
-import play.api.libs.json.JsValue
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class UserController @Inject()(
@@ -38,7 +38,7 @@ class UserController @Inject()(
       }
     )
   }
-  
+
   private def handleUserRegistration(userData: SimpleUser): Result = {
     userService.findByUsername(userData.username) match {
       case Some(userId) =>
@@ -46,6 +46,15 @@ class UserController @Inject()(
       case None =>
         userService.addUser(userData)
         Created("User registered successfully.")
+    }
+  }
+
+  def getUserInfo: Action[AnyContent] = Secure("CookieClient") { implicit request =>
+    request.profiles.headOption match {
+      case Some(user) =>
+        Ok(Json.toJson(UserInfo.fromProfile(user)))
+      case None =>
+        Unauthorized("No profile found")
     }
   }
 }

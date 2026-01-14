@@ -2,17 +2,39 @@ package controllers
 
 import model.GameData
 import play.api.*
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import play.api.mvc.*
-import services.{GameStateInstance, GameStateService}
+import services.{GameStateInstance, GameStateService, HighScoreService}
 import util.*
+import org.pac4j.play.scala.{SecureAction, Security, SecurityComponents}
+import org.pac4j.core.profile.CommonProfile
 
 import javax.inject.*
 import scala.util.{Failure, Success}
 
 @Singleton
-class HomeController @Inject()(val controllerComponents: ControllerComponents,
-                               val gameStateService: GameStateService) extends BaseController {
+class HomeController @Inject()(val controllerComponents: SecurityComponents,
+                               val gameStateService: GameStateService,
+                               val highScoreService: HighScoreService) extends
+                                                                        Security[CommonProfile] {
+
+  def getHighScore: Action[AnyContent] = Secure("CookieClient,Google2Client,GitHubClient") { implicit request =>
+    profiles.headOption match {
+      case Some(user) =>
+        val highScore = highScoreService.getHighScore(user.getId)
+        highScore match {
+          case Some(score) =>
+            Ok(s"$score")
+          case None =>
+            val (gameKey, gameState) = gameStateService.getInstance(getStateKeyCookie)
+            highScoreService.setHighScore(user.getId, gameState.getScore)
+            Ok(s"${highScoreService.getHighScore(user.getId).get}")
+              .withGameStateKeyCookie(gameKey)
+        }
+      case None =>
+        Unauthorized("No profile found")
+    }
+  }
 
   def getGame: Action[AnyContent] = Action { implicit request: Request[AnyContent] => {
     val (gameKey, gameState) = gameStateService.getInstance(getStateKeyCookie)

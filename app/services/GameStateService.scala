@@ -7,6 +7,7 @@ import scala.concurrent.duration.FiniteDuration
 
 @Singleton
 class GameStateService {
+
   private val instances: TrieMap[String, GameStateInstance] = TrieMap.empty
 
   private def newKey: String = {
